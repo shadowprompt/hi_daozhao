@@ -1,6 +1,8 @@
-package com.daozhao.news.ui.notifications
+package com.daozhao.hello.ui.notifications
 
 import android.os.Bundle
+import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +10,10 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.daozhao.news.databinding.FragmentNotificationsBinding
+import com.daozhao.hello.DaozhaoActivity
+import com.daozhao.hello.databinding.FragmentNotificationsBinding
+import com.huawei.hms.aaid.HmsInstanceId
+import com.huawei.hms.common.ApiException
 
 class NotificationsFragment : Fragment() {
 

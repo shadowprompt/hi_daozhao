@@ -1,4 +1,4 @@
-package com.daozhao.news
+package com.daozhao.hello
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -6,6 +6,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,11 +15,11 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.daozhao.news.databinding.ActivityDaozhaoBinding
+import com.daozhao.hello.databinding.ActivityDaozhaoBinding
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
 
-class DaozhaoActivity : AppCompatActivity() {
+class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
 
     private var receiver: MyReceiver? = null
 
@@ -41,6 +43,8 @@ class DaozhaoActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        findViewById<Button>(R.id.getTokenBtn).setOnClickListener(this)
     }
 
     inner class MyReceiver : BroadcastReceiver() {
@@ -59,7 +63,9 @@ class DaozhaoActivity : AppCompatActivity() {
             override fun run() {
                 try {
                     // read from agconnect-services.json
+//                    val appId = "102930575"
                     val appId = "Please enter your App_Id from agconnect-services.json "
+
                     val token = HmsInstanceId.getInstance(this@DaozhaoActivity).getToken(appId, "HCM")
                     Log.i(TAG, "get token:$token")
                     if (!TextUtils.isEmpty(token)) {
@@ -88,6 +94,12 @@ class DaozhaoActivity : AppCompatActivity() {
         private const val TAG: String = "PushDemoLog"
         private const val GET_AAID = 1
         private const val DELETE_AAID = 2
-        private const val CODELABS_ACTION: String = "com.daozhao.news.action"
+        private const val CODELABS_ACTION: String = "com.daozhao.hello.action"
+    }
+
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.getTokenBtn -> getToken()
+        }
     }
 }

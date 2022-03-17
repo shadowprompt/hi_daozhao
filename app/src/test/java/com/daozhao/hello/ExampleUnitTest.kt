@@ -1,4 +1,4 @@
-package com.daozhao.news
+package com.daozhao.hello
 
 import org.junit.Test
 

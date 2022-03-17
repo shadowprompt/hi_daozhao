@@ -1,13 +1,13 @@
-package com.daozhao.news.ui.notifications
+package com.daozhao.hello.ui.discovery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class NotificationsViewModel : ViewModel() {
+class DiscoveryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is notifications Fragment"
+        value = "This is discovery Fragment"
     }
     val text: LiveData<String> = _text
 }

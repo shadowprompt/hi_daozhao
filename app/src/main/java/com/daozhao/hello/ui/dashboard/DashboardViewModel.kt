@@ -1,4 +1,4 @@
-package com.daozhao.news.ui.dashboard
+package com.daozhao.hello.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -8,13 +8,23 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.daozhao.news"
+        applicationId "com.daozhao.hello"
         minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        // Please replace 'xxx' with your own signature certificate information
+        config {
+            storeFile file('/Users/shadow/OneDrive/DevBase/Android/DaozhaoNews/hello.jks')
+            keyPassword 'Ohmylady3'
+            keyAlias = 'key0'
+            storePassword 'Ohmylady3'
+        }
     }
 
     buildTypes {

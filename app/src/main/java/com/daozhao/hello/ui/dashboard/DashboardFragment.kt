@@ -1,4 +1,4 @@
-package com.daozhao.news.ui.discovery
+package com.daozhao.hello.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.daozhao.news.databinding.FragmentDiscoveryBinding
+import com.daozhao.hello.databinding.FragmentDashboardBinding
 
-class DiscoveryFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
-    private lateinit var discoveryViewModel: DiscoveryViewModel
-    private var _binding: FragmentDiscoveryBinding? = null
+    private lateinit var dashboardViewModel: DashboardViewModel
+    private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -24,14 +24,14 @@ class DiscoveryFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        discoveryViewModel =
-            ViewModelProvider(this).get(DiscoveryViewModel::class.java)
+        dashboardViewModel =
+            ViewModelProvider(this).get(DashboardViewModel::class.java)
 
-        _binding = FragmentDiscoveryBinding.inflate(inflater, container, false)
+        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textDiscovery
-        discoveryViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = binding.textDashboard
+        dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root
