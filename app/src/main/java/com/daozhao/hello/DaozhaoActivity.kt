@@ -1,13 +1,20 @@
 package com.daozhao.hello
 
+import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,12 +25,15 @@ import androidx.navigation.ui.setupWithNavController
 import com.daozhao.hello.databinding.ActivityDaozhaoBinding
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
+import com.huawei.hms.push.HmsMessaging
 
 class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
 
     private var receiver: MyReceiver? = null
 
     private lateinit var binding: ActivityDaozhaoBinding
+
+    private var status: Boolean = false;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +54,23 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+
+        receiver = MyReceiver()
+        val filter = IntentFilter()
+        filter.addAction(CODELABS_ACTION)
+        registerReceiver(receiver, filter)
+
+
         findViewById<Button>(R.id.getTokenBtn).setOnClickListener(this)
+        findViewById<Button>(R.id.toggle).setOnClickListener(this)
+        findViewById<Button>(R.id.btn_action).setOnClickListener(this)
+        findViewById<Button>(R.id.btn_generate_intent).setOnClickListener(this)
+
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(receiver)
     }
 
     inner class MyReceiver : BroadcastReceiver() {
@@ -80,14 +106,83 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
         }.start()
     }
 
+    private fun setReceiveNotifyMsg(enable: Boolean) {
+        showLog("Control the display of notification messages:begin")
+        if (enable) {
+            HmsMessaging.getInstance(this).turnOnPush().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    showLog("turnOnPush Complete")
+                    status = false;
+                } else {
+                    showLog("turnOnPush failed: cause=" + task.exception.message)
+                }
+            }
+        } else {
+            HmsMessaging.getInstance(this).turnOffPush().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    showLog("turnOffPush Complete")
+                    status = true;
+                } else {
+                    showLog("turnOffPush  failed: cause =" + task.exception.message)
+                }
+            }
+        }
+    }
+
+    /**
+     * In Opening a Specified Page of an App, how to Generate Intent parameters.
+     */
+    private fun generateIntentUri() {
+        val intent = Intent(Intent.ACTION_VIEW)
+
+        // You can add parameters in either of the following ways:
+        // Define a scheme protocol, for example, pushscheme://com.huawei.codelabpush/deeplink?.
+        // way 1 start: Use ampersands (&) to separate key-value pairs. The following is an example:
+        intent.data = Uri.parse("pushscheme://com.huawei.codelabpush/deeplink?name=abc&age=180")
+        // way 1 end. In this example, name=abc and age=180 are two key-value pairs separated by an ampersand (&).
+
+        // way 2 start: Directly add parameters to the Intent.
+        // intent.setData(Uri.parse("pushscheme://com.huawei.codelabpush/deeplink?"));
+        // intent.putExtra("name", "abc");
+        // intent.putExtra("age", 180);
+        // way 2 end.
+
+        // The following flag is mandatory. If it is not added, duplicate messages may be displayed.
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val intentUri = intent.toUri(Intent.URI_INTENT_SCHEME)
+        // The value of intentUri will be assigned to the intent parameter in the message to be sent.
+        Log.d("intentUri", intentUri)
+        showLog(intentUri)
+
+        // You can start the deep link activity with the following code.
+        intent.setClass(this, DeeplinkActivity::class.java);
+        startActivity(intent);
+    }
+
+    /**
+     * Simulate pulling up the application custom page by action.
+     */
+    private fun openActivityByAction() {
+        val intent = Intent("com.huawei.codelabpush.intent.action.test")
+
+        // You can start the deep link activity with the following code.
+        intent.setClass(this, Deeplink2Activity::class.java)
+        startActivity(intent)
+    }
+
 
     private fun sendRegTokenToServer(token: String?) {
         Log.i(TAG, "sending token to server. token:$token")
     }
 
 
-    fun showLog(text: String?) {
-        Toast.makeText(this, "aaa", Toast.LENGTH_LONG).show();
+    fun showLog(log: String?) {
+        runOnUiThread {
+            val textView = findViewById<View?>(R.id.msgText)
+            if (textView is TextView) {
+                textView.text = log
+            }
+        }
     }
 
     companion object {
@@ -100,6 +195,10 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.getTokenBtn -> getToken()
+            R.id.toggle -> setReceiveNotifyMsg(status)
+            R.id.btn_action -> openActivityByAction()
+            R.id.btn_generate_intent -> generateIntentUri()
         }
     }
+
 }

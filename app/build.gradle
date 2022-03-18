@@ -18,9 +18,14 @@ android {
     }
 
     signingConfigs {
-        // Please replace 'xxx' with your own signature certificate information
         config {
-            storeFile file('/Users/shadow/OneDrive/DevBase/Android/DaozhaoNews/hello.jks')
+            storeFile file('/Users/shadow/OneDrive/DevBase/Android/hello.jks')
+            keyPassword 'Ohmylady3'
+            keyAlias = 'key0'
+            storePassword 'Ohmylady3'
+        }
+        debug {
+            storeFile file('/Users/shadow/OneDrive/DevBase/Android/hello.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
             storePassword 'Ohmylady3'
