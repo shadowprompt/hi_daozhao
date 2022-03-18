@@ -193,7 +193,7 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
                     call.enqueue(object : Callback {
                         override fun onFailure(call: Call?, e: IOException?) {
                             showLog("fetch failed" + uuid)
-                            Log.e(TAG, "fetch success" + uuid);
+                            Log.e(TAG, "fetch failed" + uuid);
                         }
 
                         @Throws(IOException::class)

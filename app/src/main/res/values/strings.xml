@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Hello Daozhao</string>
-    <string name="title_activity_daozhao">HelloDaozhao</string>
+    <string name="title_activity_daozhao">Hello Daozhao</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_discovery">Discovery</string>
