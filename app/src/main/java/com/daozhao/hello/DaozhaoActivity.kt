@@ -1,31 +1,31 @@
 package com.daozhao.hello
 
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Message
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ScrollView
 import android.widget.TextView
-import android.widget.Toast
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.daozhao.hello.databinding.ActivityDaozhaoBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
+import com.google.firebase.installations.FirebaseInstallations
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.push.HmsMessaging
+import okhttp3.*
+import java.io.IOException
+
 
 class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -34,6 +34,8 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityDaozhaoBinding
 
     private var status: Boolean = false;
+
+    private val client = OkHttpClient()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +68,7 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
         findViewById<Button>(R.id.btn_action).setOnClickListener(this)
         findViewById<Button>(R.id.btn_generate_intent).setOnClickListener(this)
 
+        FirebaseApp.initializeApp(this);
     }
 
     override fun onDestroy() {
@@ -173,6 +176,37 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun sendRegTokenToServer(token: String?) {
         Log.i(TAG, "sending token to server. token:$token")
+        FirebaseInstallations.getInstance().id.addOnCompleteListener { it ->
+            run {
+                if (it.isComplete) {
+                    var uuid = it.result.toString();
+                    showLog("uuid complete " + uuid);
+
+                    var formBody: FormBody.Builder = FormBody.Builder();
+                    formBody.add("id", uuid);
+                    formBody.add("pushToken",token);
+                    val request: Request = Request.Builder()
+                        .url("https://gateway.daozhao.com.cn/HMS/storePushToken")
+                        .post(formBody.build())
+                        .build()
+                    val call: Call = client.newCall(request)
+                    call.enqueue(object : Callback {
+                        override fun onFailure(call: Call?, e: IOException?) {
+                            showLog("fetch failed" + uuid)
+                            Log.e(TAG, "fetch success" + uuid);
+                        }
+
+                        @Throws(IOException::class)
+                        override fun onResponse(call: Call?, response: Response) {
+                            val result: String = response.body().string()
+                            showLog("fetch success" + uuid)
+                            Log.i(TAG, "fetch success" + uuid);
+                        }
+                    })
+                }
+            }
+        }
+
     }
 
 
