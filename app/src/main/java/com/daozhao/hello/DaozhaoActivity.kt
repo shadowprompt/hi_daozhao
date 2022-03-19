@@ -23,6 +23,8 @@ import com.google.firebase.installations.FirebaseInstallations
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.push.HmsMessaging
+import com.huawei.hms.push.HmsProfile
+import com.huawei.hms.push.HmsProfile.CUSTOM_PROFILE
 import okhttp3.*
 import java.io.IOException
 
@@ -92,21 +94,37 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
             override fun run() {
                 try {
                     // read from agconnect-services.json
-//                    val appId = "102930575"
-                    val appId = "Please enter your App_Id from agconnect-services.json "
+                    val appId = "102930575"
 
                     val token = HmsInstanceId.getInstance(this@DaozhaoActivity).getToken(appId, "HCM")
-                    Log.i(TAG, "get token:$token")
-                    if (!TextUtils.isEmpty(token)) {
-                        sendRegTokenToServer(token)
-                    }
-                    showLog("get token:$token")
+                    storeTokenProfile(token)
                 } catch (e: ApiException) {
                     Log.e(TAG, "get token failed, $e")
                     showLog("get token failed, $e")
                 }
             }
         }.start()
+    }
+
+    private fun storeTokenProfile(token: String?) {
+        Log.i(TAG, "get token:$token")
+        showLog("get token:$token")
+        if (!TextUtils.isEmpty(token)) {
+            sendRegTokenToServer(token);
+            // 添加当前设备上的用户与应用的关系。
+            val hmsProfileInstance: HmsProfile = HmsProfile.getInstance(this@DaozhaoActivity);
+            if (hmsProfileInstance.isSupportProfile) {
+                hmsProfileInstance.addProfile(CUSTOM_PROFILE, "9105385871708200535")
+                    .addOnCompleteListener { task ->
+                        // 获取结果
+                        if (task.isSuccessful){
+                            Log.i(TAG, "add profile success.")
+                        } else{
+                            Log.e(TAG, "add profile failed: " + task.exception.message)
+                        }
+                    }
+            }
+        }
     }
 
     private fun setReceiveNotifyMsg(enable: Boolean) {
@@ -192,15 +210,15 @@ class DaozhaoActivity : AppCompatActivity(), View.OnClickListener {
                     val call: Call = client.newCall(request)
                     call.enqueue(object : Callback {
                         override fun onFailure(call: Call?, e: IOException?) {
-                            showLog("fetch failed" + uuid)
-                            Log.e(TAG, "fetch failed" + uuid);
+                            showLog("fetch failed " + uuid)
+                            Log.e(TAG, "fetch failed " + uuid);
                         }
 
                         @Throws(IOException::class)
                         override fun onResponse(call: Call?, response: Response) {
                             val result: String = response.body().string()
-                            showLog("fetch success" + uuid)
-                            Log.i(TAG, "fetch success" + uuid);
+                            showLog("fetch success " + uuid)
+                            Log.i(TAG, "fetch success " + uuid);
                         }
                     })
                 }
