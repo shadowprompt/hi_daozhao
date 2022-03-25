@@ -1,7 +1,5 @@
 package com.daozhao.hello.ui.notifications
 
-import android.R
-import android.app.Activity
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -54,8 +52,6 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
 
     private var mContext: Context ?= null
 
-    private var btn: Button? = null;
-
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val bundle = intent?.extras
@@ -88,8 +84,6 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
         })
 
 
-//
-//       root.findViewById<Button>(com.daozhao.hello.R.id.btnPt).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.getTokenBtn2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.toggle2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_action2).setOnClickListener(this)
@@ -127,22 +121,22 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
     private fun storeTokenProfile(token: String?) {
         Log.i(TAG, "get token:$token")
         showLog("get token:$token")
-//        if (!TextUtils.isEmpty(token)) {
-//            sendRegTokenToServer(token);
-//            // 添加当前设备上的用户与应用的关系。
-//            val hmsProfileInstance: HmsProfile = HmsProfile.getInstance(mContext);
-//            if (hmsProfileInstance.isSupportProfile) {
-//                hmsProfileInstance.addProfile(HmsProfile.CUSTOM_PROFILE, "9105385871708200535")
-//                    .addOnCompleteListener { task ->
-//                        // 获取结果
-//                        if (task.isSuccessful){
-//                            Log.i(TAG, "add profile success.")
-//                        } else{
-//                            Log.e(TAG, "add profile failed: " + task.exception.message)
-//                        }
-//                    }
-//            }
-//        }
+        if (!TextUtils.isEmpty(token)) {
+            sendRegTokenToServer(token);
+            // 添加当前设备上的用户与应用的关系。
+            val hmsProfileInstance: HmsProfile = HmsProfile.getInstance(mContext);
+            if (hmsProfileInstance.isSupportProfile) {
+                hmsProfileInstance.addProfile(HmsProfile.CUSTOM_PROFILE, "9105385871708200535")
+                    .addOnCompleteListener { task ->
+                        // 获取结果
+                        if (task.isSuccessful){
+                            Log.i(TAG, "add profile success.")
+                        } else{
+                            Log.e(TAG, "add profile failed: " + task.exception.message)
+                        }
+                    }
+            }
+        }
     }
 
     private fun setReceiveNotifyMsg(enable: Boolean) {
@@ -247,12 +241,10 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
 
 
     fun showLog(log: String?) {
-//        runOnUiThread {
-            val textView = root!!.findViewById<View?>(com.daozhao.hello.R.id.msgText2)
-            if (textView is TextView) {
-                textView.text = log
-            }
-//        }
+        activity?.runOnUiThread {
+            val textView = root!!.findViewById<TextView?>(com.daozhao.hello.R.id.text_notifications)
+            textView.text = log
+        }
     }
 
     fun openWeb() {
