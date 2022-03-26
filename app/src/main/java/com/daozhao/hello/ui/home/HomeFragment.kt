@@ -41,7 +41,6 @@ class HomeFragment : Fragment() {
         myWebView = root.findViewById(com.daozhao.hello.R.id.webview) as WebView
 
         initWebview();
-//        loadUrl("https://www.qq.com")
 
         viewModel.activeUrl.observe(viewLifecycleOwner, Observer {
             loadUrl(it)
@@ -57,6 +56,14 @@ class HomeFragment : Fragment() {
         myWebView!!.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
         // Configure the client to use when opening URLs
         myWebView!!.webViewClient = WebViewClient()
+        // 缩放开关，设置此属性，仅支持双击缩放，不支持触摸缩放
+        myWebView!!.settings.useWideViewPort = true
+        // 设置可以支持缩放
+        myWebView!!.settings.setSupportZoom(true)
+        // 设置出现缩放工具
+        myWebView!!.settings.builtInZoomControls = true
+        // 设定缩放控件隐藏
+        myWebView!!.settings.displayZoomControls = true
     }
 
     fun loadUrl(url: String) {

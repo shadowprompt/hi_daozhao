@@ -14,19 +14,15 @@
             android:name="push_kit_auto_init_enabled"
             android:value="false" />
 
-        <activity android:name="com.daozhao.hello.Deeplink2Activity">
+        <activity android:name="com.daozhao.hello.Deeplink2Activity" android:exported="true">
             <intent-filter>
-                <action android:name="com.daozhao.push.intent.action.test" />
+                <action android:name="com.daozhao.push.intent.action.test2" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="push_kit_auto_init_enabled"
-            android:value="false" />
-
-        <activity android:name="com.daozhao.hello.DeeplinkActivity">
+        <activity android:name="com.daozhao.hello.DeeplinkActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -40,10 +36,21 @@
 
         <activity
             android:name="com.daozhao.hello.DaozhaoActivity"
+            android:exported="true"
             android:label="@string/title_activity_daozhao">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="com.daozhao.push"
+                    android:path="/deeplink2"
+                    android:scheme="pushscheme" />
             </intent-filter>
         </activity>
 

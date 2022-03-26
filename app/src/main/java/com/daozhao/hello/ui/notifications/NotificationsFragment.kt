@@ -194,7 +194,7 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
      * Simulate pulling up the application custom page by action.
      */
     private fun openActivityByAction() {
-        val intent = Intent("com.daozhao.push.intent.action.test")
+        val intent = Intent("com.daozhao.push.intent.action.test2")
         intent.putExtra("_push_msgId", "myId");
         intent.putExtra("_push_cmd_type", "myType")
 

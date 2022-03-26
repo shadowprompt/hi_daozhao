@@ -18,6 +18,8 @@ class DaozhaoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityDaozhaoBinding
 
+    private val viewModel: UrlViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,9 +39,26 @@ class DaozhaoActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        val model: UrlViewModel by viewModels()
-        model.activeUrl.observe(this, Observer<String>{ it ->
+        onUrlChange()
+
+        getIntentData()
+    }
+
+    fun getIntentData() {
+        val uri = intent.data
+        if (uri != null) {
+            Log.i("ABC--", uri.toString())
+            val target = uri.getQueryParameter("target")
+            if (target == "pdgzf") {
+                viewModel.selectItem("https://select.pdgzf.com/houseLists");
+            }
+        }
+    }
+
+    fun onUrlChange() {
+        viewModel.activeUrl.observe(this, Observer<String>{ it ->
             Log.i("DATA", it);
         })
     }
+
 }
