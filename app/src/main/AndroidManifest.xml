@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daozhao.hello">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,8 +16,7 @@
 
         <activity android:name="com.daozhao.hello.Deeplink2Activity">
             <intent-filter>
-                <action android:name="com.huawei.codelabpush.intent.action.test" />
-
+                <action android:name="com.daozhao.push.intent.action.test" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -33,7 +32,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:host="com.huawei.codelabpush"
+                    android:host="com.daozhao.push"
                     android:path="/deeplink"
                     android:scheme="pushscheme" />
             </intent-filter>

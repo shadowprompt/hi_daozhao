@@ -1,7 +1,10 @@
 package com.daozhao.hello
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -33,6 +36,10 @@ class DaozhaoActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-    }
 
+        val model: UrlViewModel by viewModels()
+        model.activeUrl.observe(this, Observer<String>{ it ->
+            Log.i("DATA", it);
+        })
+    }
 }

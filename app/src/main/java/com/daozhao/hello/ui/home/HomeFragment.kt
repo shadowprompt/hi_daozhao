@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.daozhao.hello.UrlViewModel
 import com.daozhao.hello.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
@@ -18,6 +21,10 @@ class HomeFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var myWebView: WebView? = null
+
+    private val viewModel: UrlViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,11 +37,31 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+
+        myWebView = root.findViewById(com.daozhao.hello.R.id.webview) as WebView
+
+        initWebview();
+//        loadUrl("https://www.qq.com")
+
+        viewModel.activeUrl.observe(viewLifecycleOwner, Observer {
+            loadUrl(it)
         })
+
         return root
+    }
+
+    private fun initWebview() {
+        // Configure related browser settings
+        myWebView!!.settings.loadsImagesAutomatically = true
+        myWebView!!.settings.javaScriptEnabled = true
+        myWebView!!.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+        // Configure the client to use when opening URLs
+        myWebView!!.webViewClient = WebViewClient()
+    }
+
+    fun loadUrl(url: String) {
+        // Load the initial URL
+        myWebView!!.loadUrl(url);
     }
 
     override fun onDestroyView() {

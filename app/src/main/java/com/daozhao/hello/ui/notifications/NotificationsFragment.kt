@@ -13,12 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.daozhao.hello.DaozhaoActivity
 import com.daozhao.hello.Deeplink2Activity
 import com.daozhao.hello.DeeplinkActivity
 import com.daozhao.hello.databinding.FragmentNotificationsBinding
@@ -169,13 +167,13 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
         val intent = Intent(Intent.ACTION_VIEW)
 
         // You can add parameters in either of the following ways:
-        // Define a scheme protocol, for example, pushscheme://com.huawei.codelabpush/deeplink?.
+        // Define a scheme protocol, for example, pushscheme://com.daozhao.push/deeplink?.
         // way 1 start: Use ampersands (&) to separate key-value pairs. The following is an example:
-        intent.data = Uri.parse("pushscheme://com.huawei.codelabpush/deeplink?name=abc&age=180")
+        intent.data = Uri.parse("pushscheme://com.daozhao.push/deeplink?name=abc&age=180")
         // way 1 end. In this example, name=abc and age=180 are two key-value pairs separated by an ampersand (&).
 
         // way 2 start: Directly add parameters to the Intent.
-        // intent.setData(Uri.parse("pushscheme://com.huawei.codelabpush/deeplink?"));
+        // intent.setData(Uri.parse("pushscheme://com.daozhao.push/deeplink?"));
         // intent.putExtra("name", "abc");
         // intent.putExtra("age", 180);
         // way 2 end.
@@ -196,7 +194,9 @@ class NotificationsFragment : Fragment() , View.OnClickListener {
      * Simulate pulling up the application custom page by action.
      */
     private fun openActivityByAction() {
-        val intent = Intent("com.huawei.codelabpush.intent.action.test")
+        val intent = Intent("com.daozhao.push.intent.action.test")
+        intent.putExtra("_push_msgId", "myId");
+        intent.putExtra("_push_cmd_type", "myType")
 
         // You can start the deep link activity with the following code.
         intent.setClass(mContext!!, Deeplink2Activity::class.java)
