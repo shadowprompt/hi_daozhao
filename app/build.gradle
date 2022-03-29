@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 32
 
     defaultConfig {
         applicationId "com.daozhao.hello"
         minSdkVersion 24
-        targetSdkVersion 29
+        targetSdkVersion 32
         versionCode 1
         versionName "1.0"
 
@@ -66,7 +66,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     // HMS Push kit
-    implementation 'com.huawei.hms:push:5.0.4.302'
+    implementation 'com.huawei.hms:push:6.3.0.302'
 
     implementation 'com.squareup.okhttp3:okhttp:3.6.0'
 
