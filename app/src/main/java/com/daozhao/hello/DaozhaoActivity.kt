@@ -1,5 +1,9 @@
 package com.daozhao.hello
 
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -19,6 +23,21 @@ class DaozhaoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDaozhaoBinding
 
     private val viewModel: UrlViewModel by viewModels()
+
+    inner class MyReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val bundle = intent?.extras
+            if (bundle?.getString("msg") != null) {
+                val content = bundle.getString("msg")
+                if (content != null) {
+                    Log.e("MUCH", content)
+                    Utils.saveData(context!!, "test", "msg", content + "_9999")
+                    val res = Utils.getData(context, "test", "msg");
+                    Log.e("MUCH_Aa", res!!)
+                };
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +61,15 @@ class DaozhaoActivity : AppCompatActivity() {
         onUrlChange()
 
         getIntentData()
+
+        listen()
+    }
+
+    fun listen() {
+        val receiver = MyReceiver()
+        val filter = IntentFilter()
+        filter.addAction("com.daozhao.hello.action")
+        registerReceiver(receiver, filter)
     }
 
     fun getIntentData() {
