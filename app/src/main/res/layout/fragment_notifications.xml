@@ -19,44 +19,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:id="@+id/getTokenBtn2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Token"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/toggle2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Push Toggle"
-        app:layout_constraintTop_toBottomOf="@id/getTokenBtn2"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/btn_action2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="btn_action"
-        app:layout_constraintTop_toBottomOf="@id/toggle2"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/btn_generate_intent2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="generate_intent"
-        app:layout_constraintTop_toBottomOf="@id/btn_action2"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
-    <Button
-        android:id="@+id/btn_web2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="web"
-        app:layout_constraintTop_toBottomOf="@id/btn_generate_intent2"
-        app:layout_constraintLeft_toLeftOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

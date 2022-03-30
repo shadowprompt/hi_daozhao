@@ -61,7 +61,7 @@ class HomeFragment : Fragment() {
         // 设置可以支持缩放
         myWebView!!.settings.setSupportZoom(true)
         // 设置出现缩放工具
-        myWebView!!.settings.builtInZoomControls = true
+//        myWebView!!.settings.builtInZoomControls = true
         // 设定缩放控件隐藏
         myWebView!!.settings.displayZoomControls = true
     }

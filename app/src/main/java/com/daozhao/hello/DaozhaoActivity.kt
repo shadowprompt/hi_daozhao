@@ -50,7 +50,7 @@ class DaozhaoActivity : AppCompatActivity() {
             Log.i("ABC--", uri.toString())
             val target = uri.getQueryParameter("target")
             if (target == "pdgzf") {
-                viewModel.selectItem("https://select.pdgzf.com/houseLists");
+                viewModel.selectItem("https://www.daozhao.com");
             }
         }
     }
