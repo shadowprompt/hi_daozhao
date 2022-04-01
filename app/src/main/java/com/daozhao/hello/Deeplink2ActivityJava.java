@@ -22,7 +22,7 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class Deeplink2Activity extends AppCompatActivity {
+public class Deeplink2ActivityJava extends AppCompatActivity {
     private static final String TAG = "PushDemoLog";
     @Override
     protected void onCreate(Bundle savedInstanceState) {

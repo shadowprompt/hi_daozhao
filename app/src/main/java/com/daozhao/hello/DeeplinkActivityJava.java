@@ -26,7 +26,7 @@ import android.widget.Toast;
 /**
  * Opening a Specified Page of an App, and Receive data in the customized Activity class.
  */
-public class DeeplinkActivity extends Activity {
+public class DeeplinkActivityJava extends Activity {
     private static final String TAG = "PushDemoLog";
 
     @Override

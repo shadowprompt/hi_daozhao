@@ -98,8 +98,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.getTokenBtn2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.toggle2).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_action2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_generate_intent2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_action2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_web2).setOnClickListener(this)
 
         FirebaseApp.initializeApp(mContext!!)
@@ -216,7 +216,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
      * Simulate pulling up the application custom page by action.
      */
     private fun openActivityByAction() {
-        val intent = Intent("com.daozhao.push.intent.action.test2")
+        val intent = Intent("com.daozhao.push.action")
         intent.putExtra("_push_msgId", "myId");
         intent.putExtra("_push_cmd_type", "myType")
 
@@ -284,8 +284,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             com.daozhao.hello.R.id.taobao -> updateUrl("https://www.taobao.com")
             com.daozhao.hello.R.id.getTokenBtn2 -> getToken()
             com.daozhao.hello.R.id.toggle2 -> setReceiveNotifyMsg(status)
-            com.daozhao.hello.R.id.btn_action2 -> openActivityByAction()
             com.daozhao.hello.R.id.btn_generate_intent2 -> generateIntentUri()
+            com.daozhao.hello.R.id.btn_action2 -> openActivityByAction()
             com.daozhao.hello.R.id.btn_web2 -> openWeb()
         }
     }

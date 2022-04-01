@@ -64,7 +64,7 @@ class DaozhaoActivity : AppCompatActivity() {
 
         onUrlChange()
 
-        getIntentData()
+//        getDataFromIntent()
 
         listen()
 
@@ -113,8 +113,10 @@ class DaozhaoActivity : AppCompatActivity() {
         val list = getLocalList2(getLocalListStr(context));
         val newMsgBean: Msg = Gson().fromJson(content, Msg::class.java)
         var isExisted = false;
-        for (item in list) {
-            if (item.time === newMsgBean.time) {
+
+        for ((index, value) in list.withIndex()) {
+            // 暂时用相同时间值来避免消息推送消息重复而造成记录重复
+            if (value.time == newMsgBean.time) {
                 isExisted = true;
                 break;
             }
@@ -134,7 +136,7 @@ class DaozhaoActivity : AppCompatActivity() {
         registerReceiver(receiver, filter)
     }
 
-    fun getIntentData() {
+    fun getDataFromIntent() {
         val uri = intent.data
         if (uri != null) {
             Log.i(TAG, uri.toString())

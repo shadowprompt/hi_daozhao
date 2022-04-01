@@ -22,7 +22,7 @@
 
         <activity android:name="com.daozhao.hello.Deeplink2Activity" android:exported="true">
             <intent-filter>
-                <action android:name="com.daozhao.push.intent.action.test2" />
+                <action android:name="com.daozhao.push.action" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
@@ -34,7 +34,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
-                    android:host="com.daozhao.push"
+                    android:host="com.daozhao.push.intent"
                     android:path="/deeplink"
                     android:scheme="pushscheme" />
             </intent-filter>
@@ -47,16 +47,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="com.daozhao.push"
-                    android:path="/deeplink2"
-                    android:scheme="pushscheme" />
             </intent-filter>
         </activity>
 
