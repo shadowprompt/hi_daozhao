@@ -133,8 +133,8 @@ class DaozhaoPushService : HmsMessageService() {
         val intent = Intent()
         intent.action = CODELABS_ACTION
         intent.putExtra("method", "onMessageReceived")
-        intent.putExtra("msg", "onMessageReceived called, message id:" + message.messageId + ", payload data:"
-                + message.data)
+        intent.putExtra("msg", "onMessageReceived called, message id:" + message.messageId)
+        intent.putExtra("msgData", message.data)
         sendBroadcast(intent)
         val judgeWhetherIn10s = false
 
@@ -185,7 +185,7 @@ class DaozhaoPushService : HmsMessageService() {
     }
 
     companion object {
-        private const val TAG: String = "PushDemoLog"
-        private const val CODELABS_ACTION: String = "com.daozhao.hello.action"
+        private const val TAG: String = "DaozhaoPushService"
+        private const val CODELABS_ACTION: String = "com.daozhao.push.action"
     }
 }

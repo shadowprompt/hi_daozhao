@@ -3,6 +3,8 @@ package com.daozhao.hello
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 object Utils {
@@ -26,4 +28,12 @@ object Utils {
         return value;
     }
 
+    fun getLogList(context: Context, database: String, key: String) : ArrayList<Msg> {
+        var str = this.getData(context!!, database, key);
+        if (str == "") {
+            str = "[]"
+        }
+        val type = object : TypeToken<ArrayList<Msg>>() {}.type
+        return Gson().fromJson(str, type)
+    }
 }

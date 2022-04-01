@@ -291,10 +291,10 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     }
 
     companion object {
-        private const val TAG: String = "PushDemoLog"
+        private const val TAG: String = "DashboardFragment"
         private const val GET_AAID = 1
         private const val DELETE_AAID = 2
-        private const val CODELABS_ACTION: String = "com.daozhao.hello.action"
+        private const val CODELABS_ACTION: String = "com.daozhao.push.action"
         private val dataMap = object {
             val jd = "https://www.jd.com"
             val taobao = "https://www.taobao.com"

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_corner"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+        <TextView
+            android:id="@+id/msgTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:text="时间"
+            android:lineSpacingMultiplier="1.1"
+            android:letterSpacing="0.04"
+            android:padding="10dp"
+            android:minHeight="20dp"
+            android:minWidth="150dp"
+            />
+        <TextView
+            android:id="@+id/msgTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/msgTime"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="主题"
+            android:lineSpacingMultiplier="1.1"
+            android:letterSpacing="0.04"
+            android:padding="10dp"
+            android:minHeight="20dp"
+            android:minWidth="200dp"
+            />
+        <TextView
+            android:id="@+id/msgBody"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/msgTitle"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:text="这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息这是一条消息"
+            android:lineSpacingMultiplier="1.1"
+            android:letterSpacing="0.04"
+            android:padding="10dp"
+            android:minHeight="40dp"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
