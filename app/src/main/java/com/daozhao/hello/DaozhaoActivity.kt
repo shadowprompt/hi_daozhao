@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -19,6 +20,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import java.text.ParsePosition
 
 class DaozhaoActivity : AppCompatActivity() {
 
@@ -82,7 +84,7 @@ class DaozhaoActivity : AppCompatActivity() {
         Log.i(TAG, strJson.toString())
     }
 
-    fun getLocalListStr(context: Context): String {
+    private fun getLocalListStr(context: Context): String {
         var strByJson = Utils.getData(context, "test", "msgList");
         if (strByJson == "") {
             strByJson = "[]"
@@ -96,7 +98,7 @@ class DaozhaoActivity : AppCompatActivity() {
         return Gson().fromJson(str, type)
     }
 
-    fun getLocalList2(str: String): ArrayList<Msg> {
+    private fun getLocalList2(str: String): ArrayList<Msg> {
         val jsonArray: JsonArray = JsonParser.parseString(str).asJsonArray
         val msgBeanList: ArrayList<Msg> = ArrayList()
         //加强for循环遍历JsonArray
@@ -109,21 +111,43 @@ class DaozhaoActivity : AppCompatActivity() {
         return msgBeanList
     }
 
-    fun updateLog(context: Context, content: String) {
-        val list = getLocalList2(getLocalListStr(context));
-        val newMsgBean: Msg = Gson().fromJson(content, Msg::class.java)
-        var isExisted = false;
-
-        for ((index, value) in list.withIndex()) {
-            // 暂时用相同时间值来避免消息推送消息重复而造成记录重复
-            if (value.time == newMsgBean.time) {
-                isExisted = true;
-                break;
+    private fun removeDuplicateMsgList(list: ArrayList<Msg>) {
+        val result: ArrayList<Msg> = ArrayList(list.size)
+        val set: HashSet<String> = HashSet<String>(list.size)
+        for (item in list) {
+            if (!set.contains(item.time)) {
+                result.add(item)
             }
         }
-        if (!isExisted) {
-            list.add(newMsgBean)
+        list.clear()
+        list.addAll(result)
+    }
+
+    private fun sortMsgList(list: ArrayList<Msg>) {
+        list.sortWith { a, b ->
+            run {
+                var timeA =
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(a.time, ParsePosition(0)).time
+                var timeB =
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(b.time, ParsePosition(0)).time
+                timeB.compareTo(timeA)
+            }
         }
+    }
+
+    fun updateLog(context: Context, content: String) {
+        var list = getLocalList2(getLocalListStr(context));
+        val newMsgBean: Msg = Gson().fromJson(content, Msg::class.java)
+
+        list.add(newMsgBean)
+
+//        removeDuplicateMsgList(list)
+
+        list = list.distinctBy { it.time }  as ArrayList<Msg>
+
+        sortMsgList(list)
+
+
         val listStr = Gson().toJson(list);
         Log.e(TAG, listStr)
         Utils.saveData(context!!, "test", "msgList", listStr)
@@ -147,7 +171,7 @@ class DaozhaoActivity : AppCompatActivity() {
         }
     }
 
-    fun onUrlChange() {
+    private fun onUrlChange() {
         viewModel.activeUrl.observe(this, Observer<String>{ it ->
             Log.i(TAG, it);
         })
