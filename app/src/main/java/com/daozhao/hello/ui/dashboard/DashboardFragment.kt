@@ -69,7 +69,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     )
 
     // Defines a string to contain the selection clause
-    private var selectionClause: String? = "SELECT _ID, word, locale FROM words ORDER BY word ASC"
+    private var selectionClause: String? = UserDictionary.Words.LOCALE + "LIKE ?"
 
     // Declares an array to contain selection arguments
     private var selectionArgs: Array<String>? = emptyArray()
@@ -333,7 +333,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             .setAutoCancel(true)
             .addAction(R.drawable.ic_launcher_background, "snooze", snoozePendingIntent)
 
-        NotificationManagerCompat.from(mContext!!).notify(0, builder.build())
+        NotificationManagerCompat.from(requireContext()).notify(0, builder.build())
     }
 
     private fun createNotificationChannel() {
@@ -423,20 +423,15 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             }
         }
 
-        val wordListColumns : Array<String> = arrayOf(
-            UserDictionary.Words.WORD,      // Contract class constant containing the word column name
-            UserDictionary.Words.LOCALE     // Contract class constant containing the locale column name
-        )
-
         // Defines a list of View IDs that will receive the Cursor columns for each row
-        val wordListItems = intArrayOf(R.id.textDictWord, R.id.textDictLocal)
+        val wordListItems = intArrayOf(R.id.msgTitle, R.id.msgBody)
 
         // Creates a new SimpleCursorAdapter
         val cursorAdapter = SimpleCursorAdapter(
             mContext,             // The application's Context object
             R.layout.msg_item,           // A layout in XML for one row in the ListView
             mCursor,                        // The result from the query
-            wordListColumns,               // A string array of column names in the cursor
+            mProjection,               // A string array of column names in the cursor
             wordListItems,                 // An integer array of view IDs in the row layout
             0                               // Flags (usually none are needed)
         )
