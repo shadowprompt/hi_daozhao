@@ -1,16 +1,21 @@
 package com.daozhao.hello.ui.discovery
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentResolver
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -130,11 +135,40 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     // 保留this for contact detail
     private var self: LoaderManager.LoaderCallbacks<Cursor>?  = null
 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                //用户同意了权限申请
+            }else{
+                //用户拒绝了权限申请，建议向用户解释权限用途
+            }
+        }
+        Toast.makeText(requireContext(), requestCode.toString(), Toast.LENGTH_LONG).show()
+
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val hasPermission: Int = ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_CONTACTS
+        )
+        if (hasPermission == PackageManager.PERMISSION_GRANTED) {
+            //已获取权限
+        } else {
+            //未获取权限
+            requestPermissions(arrayOf(Manifest.permission.WRITE_CONTACTS), 0)
+        }
+
         discoveryViewModel =
             ViewModelProvider(this).get(DiscoveryViewModel::class.java)
 
@@ -285,6 +319,58 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
             textView?.let {
                 it.text = it.text.toString() + infos.toString();
             }
+        } else if (loaderFlag == LIST_QUERY_ID && cursor?.count!! > 0) {
+            // 用进程打印列表数据
+            Thread {
+                try {
+                    while (cursor.moveToNext()) {
+                        val theKey = cursor.getString(1)
+                        val theName = cursor.getString(2)
+
+                        var infos: MutableList<String?> = ArrayList()
+                        infos.add("name = $theName")
+
+                        val bd: ContentResolver = requireActivity().contentResolver
+                        detailSelectionArgs[0] = theKey!!
+                        val curs: Cursor? = bd.query(ContactsContract.Data.CONTENT_URI,
+                            DETAIL_PROJECTION,
+                            DETAIL_SELECTION,
+                            detailSelectionArgs,
+                            null)
+
+                        if (curs != null) {
+                            while (curs.moveToNext()) {
+                                val id: Long = cursor.getLong(0)
+                                val name: String = curs.getString(1) // full name
+
+                                val mime: String = curs.getString(2) // type of data (phone / birthday / email)
+
+                                val data: String? = curs.getString(3) // the actual info, e.g. +1-212-555-1234
+
+                                var type: String? = curs.getString(4);
+
+                                var label: String? = curs.getString(5);
+
+                                var kind = "unknown"
+
+                                when (mime) {
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> kind = "phone"
+                                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE -> kind = "event"
+                                    ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE -> kind = "email"
+                                    ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE -> kind = "note"
+                                }
+
+
+
+                                infos!!.add("$kind  = $data/$type/$label")
+                            }
+                            Log.i("ABC", infos.toString())
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.e("ABC", "while error $e")
+                }
+            }.start()
         }
     }
 
