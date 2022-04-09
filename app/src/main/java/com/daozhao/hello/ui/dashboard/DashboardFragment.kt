@@ -1,25 +1,19 @@
 package com.daozhao.hello.ui.dashboard
 
+import android.Manifest
 import android.app.*
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.provider.ContactsContract
 import android.provider.UserDictionary
 import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ListView
-import android.widget.SimpleCursorAdapter
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -35,6 +29,7 @@ import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.push.HmsMessaging
 import com.huawei.hms.push.HmsProfile
+import com.permissionx.guolindev.PermissionX
 import okhttp3.*
 import java.io.IOException
 import java.util.*
@@ -69,10 +64,21 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     )
 
     // Defines a string to contain the selection clause
-    private var selectionClause: String? = UserDictionary.Words.LOCALE + "LIKE ?"
+    private var selectionClause: String? = UserDictionary.Words.LOCALE + " LIKE ?"
 
     // Declares an array to contain selection arguments
-    private var selectionArgs: Array<String>? = emptyArray()
+    private var selectionArgs: Array<String> = arrayOf("")
+
+    companion object {
+        private const val TAG: String = "DashboardFragment"
+        private const val GET_AAID = 1
+        private const val DELETE_AAID = 2
+        private const val CODELABS_ACTION: String = "com.daozhao.push.action"
+        private val dataMap = object {
+            val jd = "https://www.jd.com"
+            val taobao = "https://www.taobao.com"
+        }
+    }
 
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -120,16 +126,16 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
 
 
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.getTokenBtn2).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.toggle2).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_generate_intent2).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_action2).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_web2).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_getContact).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.jd).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.taobao).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_showNotice).setOnClickListener(this)
-        (root as ConstraintLayout).findViewById<Button>(com.daozhao.hello.R.id.btn_showAlarm).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.getTokenBtn2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.toggle2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_generate_intent2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_action2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_web2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_getContact).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.jd).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.contact).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_showNotice).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_showAlarm).setOnClickListener(this)
 
 
         FirebaseApp.initializeApp(mContext!!)
@@ -145,7 +151,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     private fun updateUrl(url: String) {
         Log.i("updateUrl", url)
 
-//        val mainFragment: HomeFragment? = activity?.supportFragmentManager?.findFragmentById(com.daozhao.hello.R.id.navigation_home) as HomeFragment?
+//        val mainFragment: HomeFragment? = activity?.supportFragmentManager?.findFragmentById(R.id.navigation_home) as HomeFragment?
 //        mainFragment?.loadUrl(url)
         viewModel.selectItem(url);
     }
@@ -294,7 +300,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
     fun showLog(log: String?) {
         activity?.runOnUiThread {
-            val textView = root!!.findViewById<TextView?>(com.daozhao.hello.R.id.text_dashboard)
+            val textView = root!!.findViewById<TextView?>(R.id.text_dashboard)
             textView.text = log
         }
     }
@@ -394,6 +400,11 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     }
 
     fun getContact() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+            Log.e(TAG, Build.VERSION.SDK_INT.toString())
+            Toast.makeText(requireContext(), "Your android version is lower than " + Build.VERSION_CODES.LOLLIPOP_MR1, Toast.LENGTH_LONG).show()
+            return
+        }
 
         var mCursor = mContext!!.contentResolver.query(
             UserDictionary.Words.CONTENT_URI,   // The content URI of the words table
@@ -402,7 +413,11 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             selectionArgs,      // Selection criteria
             null         // The sort order for the returned rows
         )
-
+        val values = ContentValues(3)
+        val locale = Locale.getDefault()
+        val localString = locale.toString()
+        selectionArgs[0] = "%$localString%"
+        var resultUri : Uri? = null
         when (mCursor?.count) {
             null -> {
                 /*
@@ -412,16 +427,29 @@ class DashboardFragment : Fragment(), View.OnClickListener {
                  */
             }
             0 -> {
-                /*
-                 * Insert code here to notify the user that the search was unsuccessful. This isn't
-                 * necessarily an error. You may want to offer the user the option to insert a new
-                 * row, or re-type the search term.
-                 */
+                // 如果没有的话先插入数据
+                values.put(UserDictionary.Words.APP_ID, "com.daozhao.hello")
+                values.put(UserDictionary.Words.WORD, "Tuasimodo")
+                values.put(UserDictionary.Words.FREQUENCY, 250)
+                values.put(UserDictionary.Words.LOCALE, localString)
+                resultUri = requireActivity().contentResolver.insert(UserDictionary.Words.CONTENT_URI, values)
+
+                UserDictionary.Words.addWord(requireContext(), "Dext", 100, "dt",  locale)
             }
             else -> {
                 // Insert code here to do something with the results
             }
         }
+
+        Log.e(TAG, resultUri.toString())
+
+        mCursor = requireActivity().contentResolver.query(
+            UserDictionary.Words.CONTENT_URI,   // The content URI of the words table
+            mProjection,                        // The columns to return for each row
+            selectionClause,                   // Selection criteria
+            selectionArgs,      // Selection criteria
+            null         // The sort order for the returned rows
+        )
 
         // Defines a list of View IDs that will receive the Cursor columns for each row
         val wordListItems = intArrayOf(R.id.msgTitle, R.id.msgBody)
@@ -460,29 +488,50 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onClick(v: View?) {
-        when(v?.id) {
-            com.daozhao.hello.R.id.getTokenBtn2 -> getToken()
-            com.daozhao.hello.R.id.toggle2 -> setReceiveNotifyMsg(status)
-            com.daozhao.hello.R.id.btn_generate_intent2 -> generateIntentUri()
-            com.daozhao.hello.R.id.btn_action2 -> openActivityByAction()
-            com.daozhao.hello.R.id.btn_web2 -> openWeb()
-            com.daozhao.hello.R.id.btn_showNotice -> showNotice()
-            com.daozhao.hello.R.id.btn_showAlarm -> showAlarm()
-            com.daozhao.hello.R.id.btn_getContact -> getContact()
-            com.daozhao.hello.R.id.jd -> updateUrl("https://www.jd.com")
-            com.daozhao.hello.R.id.taobao -> updateUrl("https://www.taobao.com")
-        }
+    private fun getContactPermission(){
+        PermissionX.init(this)
+
+            .permissions(Manifest.permission.READ_CONTACTS, Manifest.permission.ACCESS_FINE_LOCATION)
+
+            .onExplainRequestReason { scope, deniedList ->
+
+                val message = "需要您同意通讯录和定位权限"
+
+                val ok = "确定"
+
+                scope.showRequestReasonDialog(deniedList, message, ok)
+
+            }
+
+            .onForwardToSettings { scope, deniedList ->
+
+                val message = "您需要去设置当中同意通讯录和定位权限"
+
+                val ok = "确定"
+
+                scope.showForwardToSettingsDialog(deniedList, message, ok)
+
+            }
+
+            .request { _, _, _ ->
+
+                openWeb()
+
+            }
     }
 
-    companion object {
-        private const val TAG: String = "DashboardFragment"
-        private const val GET_AAID = 1
-        private const val DELETE_AAID = 2
-        private const val CODELABS_ACTION: String = "com.daozhao.push.action"
-        private val dataMap = object {
-            val jd = "https://www.jd.com"
-            val taobao = "https://www.taobao.com"
+    override fun onClick(v: View?) {
+        when(v?.id) {
+            R.id.getTokenBtn2 -> getToken()
+            R.id.toggle2 -> setReceiveNotifyMsg(status)
+            R.id.btn_generate_intent2 -> generateIntentUri()
+            R.id.btn_action2 -> openActivityByAction()
+            R.id.btn_web2 -> openWeb()
+            R.id.btn_showNotice -> showNotice()
+            R.id.btn_showAlarm -> showAlarm()
+            R.id.btn_getContact -> getContact()
+            R.id.jd -> updateUrl("https://www.jd.com")
+            R.id.contact -> getContactPermission()
         }
     }
 }
