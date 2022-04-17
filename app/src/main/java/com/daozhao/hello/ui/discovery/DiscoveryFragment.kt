@@ -24,6 +24,9 @@ import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
 import com.daozhao.hello.R
 import com.daozhao.hello.databinding.FragmentDiscoveryBinding
+import com.daozhao.hello.User
+import com.daozhao.hello.UserEvent
+import com.daozhao.hello.UserPhone
 
 
 // The column index for the _ID column
@@ -322,22 +325,26 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
         } else if (loaderFlag == LIST_QUERY_ID && cursor?.count!! > 0) {
             // 用进程打印列表数据
             Thread {
+                val userList: ArrayList<User> = arrayListOf();
+                var userHashMap: HashMap<String, User> = HashMap();
                 try {
                     while (cursor.moveToNext()) {
-                        val theKey = cursor.getString(1)
-                        val theName = cursor.getString(2)
+                        val contactId = cursor.getString(0)
+                        val contactKey = cursor.getString(1)
+                        val contactName = cursor.getString(2)
 
                         var infos: MutableList<String?> = ArrayList()
-                        infos.add("name = $theName")
+                        infos.add("contactName = $contactName")
 
                         val bd: ContentResolver = requireActivity().contentResolver
-                        detailSelectionArgs[0] = theKey!!
+                        detailSelectionArgs[0] = contactKey!!
                         val curs: Cursor? = bd.query(ContactsContract.Data.CONTENT_URI,
                             DETAIL_PROJECTION,
                             DETAIL_SELECTION,
                             detailSelectionArgs,
                             null)
-
+                        var userPhoneList : ArrayList<UserPhone> = arrayListOf();
+                        var userEventList : ArrayList<UserEvent> = arrayListOf();
                         if (curs != null) {
                             while (curs.moveToNext()) {
                                 val id: Long = cursor.getLong(0)
@@ -354,8 +361,14 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
                                 var kind = "unknown"
 
                                 when (mime) {
-                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> kind = "phone"
-                                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE -> kind = "event"
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE -> {
+                                        kind = "phone"
+                                        userPhoneList.add(UserPhone(contactKey, data, type, label))
+                                    }
+                                    ContactsContract.CommonDataKinds.Event.CONTENT_ITEM_TYPE -> {
+                                        kind = "event"
+                                        userEventList.add(UserEvent(contactKey, data, type, label))
+                                    }
                                     ContactsContract.CommonDataKinds.Email.CONTENT_ITEM_TYPE -> kind = "email"
                                     ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE -> kind = "note"
                                 }
@@ -364,12 +377,18 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
 
                                 infos!!.add("$kind  = $data/$type/$label")
                             }
-                            Log.i("ABC", infos.toString())
+//                            Log.i("ABC", infos.toString())
+                        }
+                        val user = User(contactKey, contactId, contactName, userPhoneList, userEventList, null);
+                        if (!userHashMap.containsKey(user.key) && userEventList.size > 0) {
+                            userHashMap.put(user.key, user);
+                            userList.add(User(contactKey, contactId, contactName, userPhoneList, userEventList, null))
                         }
                     }
                 } catch (e: Exception) {
                     Log.e("ABC", "while error $e")
                 }
+                Log.i("EFG", userList.toString())
             }.start()
         }
     }
