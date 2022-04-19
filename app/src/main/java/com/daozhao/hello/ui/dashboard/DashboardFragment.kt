@@ -25,6 +25,9 @@ import com.daozhao.hello.*
 import com.daozhao.hello.databinding.FragmentDashboardBinding
 import com.google.firebase.FirebaseApp
 import com.google.firebase.installations.FirebaseInstallations
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
 import com.huawei.hms.aaid.HmsInstanceId
 import com.huawei.hms.common.ApiException
 import com.huawei.hms.push.HmsMessaging
@@ -136,6 +139,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         (root as ConstraintLayout).findViewById<Button>(R.id.contact).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_showNotice).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_showAlarm).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_setToAlarm).setOnClickListener(this)
 
 
         FirebaseApp.initializeApp(mContext!!)
@@ -398,11 +402,43 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             calendarAlarmIntent
         )
     }
+    // 利用日历设置闹钟
+    fun setCalendarAlarm(user: User) {
+        user.events.forEach {
+            val birthday = it.data;
+            if (birthday != null) {
+                var year = 2022;
+                var month = birthday.substring(4, 6);
+                var date = birthday.substring(6, 8);
+                val amMgr = requireContext()!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val calendar: Calendar = Calendar.getInstance().apply {
+                    timeInMillis = System.currentTimeMillis()
+                    set(Calendar.YEAR, year)
+                    set(Calendar.MONTH, month.toInt() - 1) // 从0开始，即1月份为0 12月份为11
+                    set(Calendar.DATE, date.toInt())
+                    set(Calendar.HOUR_OF_DAY, 9);
+                    set(Calendar.MINUTE, 58);
+                    set(Calendar.SECOND, 0);
+                }
+                val calendarAlarmIntent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
+                    intent.action = CONST.ALARM_ACTION
+                    intent.putExtra("name", user.name)
+                    PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                }
+                Log.i("ALARM", user.name + ": " + year + month + date)
+                amMgr?.set(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    calendarAlarmIntent
+                )
+            }
+        }
+    }
 
     fun getContact() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP_MR1) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
             Log.e(TAG, Build.VERSION.SDK_INT.toString())
-            Toast.makeText(requireContext(), "Your android version is lower than " + Build.VERSION_CODES.LOLLIPOP_MR1, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Your android version is upper than " + Build.VERSION_CODES.LOLLIPOP_MR1, Toast.LENGTH_LONG).show()
             return
         }
 
@@ -520,6 +556,24 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             }
     }
 
+    fun setToAlarm () {
+        var strByJson = Utils.getData(requireContext()!!, "test", "userList");
+        if (strByJson == "") {
+            strByJson = "[]"
+        }
+        val jsonArray: JsonArray = JsonParser.parseString(strByJson).asJsonArray
+        val beanList: ArrayList<User> = ArrayList()
+        //加强for循环遍历JsonArray
+        for (item in jsonArray) {
+            //使用GSON，直接转成Bean对象
+            val bean: User =  Gson().fromJson(item, User::class.java)
+            //加强for循环遍历JsonArray
+            beanList.add(bean)
+            setCalendarAlarm(bean)
+        }
+        Log.e("aaa", beanList.toString())
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.getTokenBtn2 -> getToken()
@@ -532,6 +586,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.btn_getContact -> getContact()
             R.id.jd -> updateUrl("https://www.jd.com")
             R.id.contact -> getContactPermission()
+            R.id.btn_setToAlarm -> setToAlarm()
         }
     }
 }

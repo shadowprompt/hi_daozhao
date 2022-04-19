@@ -3,6 +3,7 @@ package com.daozhao.hello.ui.discovery
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.Context
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -22,11 +23,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
-import com.daozhao.hello.R
+import com.daozhao.hello.*
 import com.daozhao.hello.databinding.FragmentDiscoveryBinding
-import com.daozhao.hello.User
-import com.daozhao.hello.UserEvent
-import com.daozhao.hello.UserPhone
+import com.google.gson.Gson
 
 
 // The column index for the _ID column
@@ -126,6 +125,9 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     var contactName: String? = null
     // A content URI for the selected contact
     var contactUri: Uri? = null
+
+    private var mContext: Context?= null
+
     /*
   * Defines a variable to contain the selection value. Once you
   * have the Cursor from the Contacts table, and you've selected
@@ -377,7 +379,7 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
 
                                 infos!!.add("$kind  = $data/$type/$label")
                             }
-//                            Log.i("ABC", infos.toString())
+                            Log.i("ABC", infos.toString())
                         }
                         val user = User(contactKey, contactId, contactName, userPhoneList, userEventList, null);
                         if (!userHashMap.containsKey(user.key) && userEventList.size > 0) {
@@ -389,6 +391,13 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
                     Log.e("ABC", "while error $e")
                 }
                 Log.i("EFG", userList.toString())
+                if (userList.size > 0) {
+                    val userListStr = Gson().toJson(userList);
+                    Utils.saveData(mContext!!, "test", "userList", userListStr)
+                    requireActivity().findViewById<TextView>(R.id.text_discovery)?.let {
+                        it.text = "over" + userList.size
+                    }
+                }
             }.start()
         }
     }
@@ -396,5 +405,10 @@ class DiscoveryFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor>,
     override fun onLoaderReset(loader: Loader<Cursor>) {
         // Delete the reference to the existing Cursor
         cursorAdapter?.swapCursor(null)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context;
     }
 }
