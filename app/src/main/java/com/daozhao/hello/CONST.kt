@@ -7,4 +7,7 @@ object CONST {
     const val PUSH_ACTION = "com.daozhao.push.action"
     const val ALARM_ACTION = "com.daozhao.alarm.action"
     const val ALARM_SCHEDULE_ACTION = "com.daozhao.alarm.schedule.action"
+
+    const val BIRTHDAY = "BIRTHDAY"
+    const val FETCH = "FETCH"
 }

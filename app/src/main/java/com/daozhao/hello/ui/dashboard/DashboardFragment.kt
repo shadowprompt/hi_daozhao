@@ -268,7 +268,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
     private fun sendRegTokenToServer(token: String?) {
         Log.i(TAG, "sending token to server. token:$token")
-        FirebaseInstallations.getInstance().id.addOnCompleteListener { it ->
+        FirebaseInstallations.getInstance().id.addOnCompleteListener {
             run {
                 if (it.isComplete) {
                     var uuid = it.result.toString();
@@ -332,15 +332,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         val snoozePendingIntent: PendingIntent =
             PendingIntent.getBroadcast(mContext, 0, snoozeIntent, PendingIntent.FLAG_IMMUTABLE)
 
-        var builder = NotificationCompat.Builder(mContext!!, CONST.NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_home_black_24dp)
-            .setContentTitle("textTitle")
-            .setContentText("textContent")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        var builder = Utils.noticeBuilder( requireContext(), "标题", "text", "这是个很长的问题在")
             .setContentIntent(pendingIntent)
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText("firstLine dfadfadfadfadf \n secondline adjkjdkfadjkfadfadf \n 打发打发打发打发的"))
-            .setAutoCancel(true)
             .addAction(R.drawable.ic_launcher_background, "snooze", snoozePendingIntent)
 
         NotificationManagerCompat.from(requireContext()).notify(0, builder.build())
@@ -403,33 +396,38 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         )
     }
     // 利用日历设置闹钟
-    fun setCalendarAlarm(user: User) {
+    private fun setCalendarAlarm(user: User, index: Int) {
         user.events.forEach {
             val birthday = it.data;
             if (birthday != null) {
-                var year = 2022;
-                var month = birthday.substring(4, 6);
-                var date = birthday.substring(6, 8);
-                val amMgr = requireContext()!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val year = 2022;
+                val month = birthday.substring(4, 6);
+                val date = birthday.substring(6, 8);
+                val amMgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                val currentDate = Calendar.getInstance()
                 val calendar: Calendar = Calendar.getInstance().apply {
-                    timeInMillis = System.currentTimeMillis()
-                    set(Calendar.YEAR, year)
                     set(Calendar.MONTH, month.toInt() - 1) // 从0开始，即1月份为0 12月份为11
                     set(Calendar.DATE, date.toInt())
-                    set(Calendar.HOUR_OF_DAY, 9);
-                    set(Calendar.MINUTE, 58);
-                    set(Calendar.SECOND, 0);
+                    set(Calendar.HOUR_OF_DAY, 22);
+                    set(Calendar.MINUTE, 0);
+                    if (this.before(currentDate)) {
+                        set(Calendar.YEAR, year + 1)
+                        Log.i("ALARM_EXPIRES", user.name + ": " + year + month + date)
+                    }
                 }
-                val calendarAlarmIntent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
+                val intent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
                     intent.action = CONST.ALARM_ACTION
+                    intent.putExtra("TYPE", CONST.BIRTHDAY)
                     intent.putExtra("name", user.name)
-                    PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+                    intent.putExtra("birthday", birthday)
                 }
-                Log.i("ALARM", user.name + ": " + year + month + date)
-                amMgr?.set(
+                val pendingAlarmIntent = PendingIntent.getBroadcast(mContext, index + birthday.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
+
+                Log.i("ALARM", user.name + ": " + year + month + date + " size: " + index +  " ts: " + calendar.timeInMillis)
+                amMgr.set(
                     AlarmManager.RTC_WAKEUP,
-                    calendar.getTimeInMillis(),
-                    calendarAlarmIntent
+                    calendar.timeInMillis,
+                    pendingAlarmIntent
                 )
             }
         }
@@ -569,9 +567,9 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             val bean: User =  Gson().fromJson(item, User::class.java)
             //加强for循环遍历JsonArray
             beanList.add(bean)
-            setCalendarAlarm(bean)
+            setCalendarAlarm(bean, beanList.size)
         }
-        Log.e("aaa", beanList.toString())
+        Log.i("ALARM_LIST", beanList.toString())
     }
 
     override fun onClick(v: View?) {

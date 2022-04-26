@@ -63,7 +63,7 @@ private val PROJECTION: Array<out String> = arrayOf(
     ContactsContract.Contacts._ID,
     ContactsContract.Contacts.LOOKUP_KEY,
     DISPLAY_NAME,
-    ContactsContract.CommonDataKinds.Phone.NUMBER
+    ContactsContract.Contacts.Data.DATA1
 )
 
 private val SELECTION: String =
@@ -304,11 +304,12 @@ class ContactListFragment : Fragment(), AdapterView.OnItemClickListener, LoaderM
                                     ContactsContract.CommonDataKinds.Note.CONTENT_ITEM_TYPE -> kind = "note"
                                 }
 
+                                if (data != null) {
+                                    currentInfos!!.add("$kind  = $data/$type/$label")
+                                }
 
-
-                                currentInfos!!.add("$kind  = $data/$type/$label")
                             }
-                            Log.i("CURRENT", currentInfos.toString())
+                            Log.i("CURRENT", contactName + "_" + contactId + "_" +  currentInfos.toString())
                         }
                         val user = User(contactKey, contactId, contactName, userPhoneList, userEventList, null);
                         if (!userHashMap.containsKey(user.key) && userEventList.size > 0) {

@@ -3,16 +3,24 @@ package com.daozhao.hello
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.widget.Toast
+import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 
 class AlarmReceiver: BroadcastReceiver() {
-    override fun onReceive(mContent: Context?, intent: Intent?) {
+    override fun onReceive(mContent: Context, intent: Intent?) {
         if (CONST.ALARM_ACTION.equals(intent!!.getAction())) {
-            // 第1步中设置的闹铃时间到，这里可以弹出闹铃提示并播放响铃
-            val name = intent.getStringExtra("name");
-            val text = "hello alarm " + name;
-            Toast.makeText(mContent, text, Toast.LENGTH_LONG).show();
-            System.out.println(text);
+            when(intent.getStringExtra("type")) {
+                CONST.BIRTHDAY -> { // 生日提醒
+                    val name = intent.getStringExtra("name")
+                    val birthday = intent.getStringExtra("birthday")
+                    val text = "hello alarm $name"
+                    Log.i("ALARM_SHOW", text)
+                    val builder = Utils.noticeBuilder(mContent, "Happy birthday", "date: $birthday", "Have a nice day!")
+
+                    NotificationManagerCompat.from(mContent).notify(0, builder.build())
+                }
+            }
+
             // 可以继续设置下一次闹铃时间;
             return;
         }

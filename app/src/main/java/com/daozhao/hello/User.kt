@@ -5,14 +5,10 @@ data class User (val key: String, val id: String, val name: String, val phones: 
 }
 
 class UserPhone (val userKey: String, data: String?, val type: String?, val label: String? ) {
-    var data = data?.let {
-        it.replace(" ", "").replace("/", "")
-    }
+    var data = data?.replace(" ", "")?.replace("/", "")
 }
 
 
 class UserEvent (val userKey: String, data: String?, val type: String?, val label: String?, ) {
-    var data = data?.let {
-        it.replace(" ", "").replace("/", "").replace("-", "")
-    }
+    var data = data?.replace(" ", "")?.replace("/", "")?.replace("-", "")
 }

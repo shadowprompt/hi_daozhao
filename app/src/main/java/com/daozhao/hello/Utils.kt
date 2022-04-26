@@ -1,8 +1,11 @@
 package com.daozhao.hello
 
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -35,5 +38,17 @@ object Utils {
         }
         val type = object : TypeToken<ArrayList<Msg>>() {}.type
         return Gson().fromJson(str, type)
+    }
+
+    fun noticeBuilder(context: Context, title: String, text: String, bigText: String): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context!!, CONST.NOTIFICATION_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_home_black_24dp)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                .bigText(bigText))
+            .setAutoCancel(true)
     }
 }
