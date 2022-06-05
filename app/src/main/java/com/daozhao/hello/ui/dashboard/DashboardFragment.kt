@@ -15,12 +15,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import cn.hutool.core.date.ChineseDate
+import cn.hutool.core.date.DateUtil
 import com.daozhao.hello.*
 import com.daozhao.hello.databinding.FragmentDashboardBinding
 import com.google.firebase.FirebaseApp
@@ -375,18 +376,26 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             repeatAlarmIntent
         )
 
-        // 指定时间进行闹钟提醒
-        // Set the alarm to start at 15:30 a.m.
+        // 10秒后进行闹钟提醒
+        val timeInMillis = System.currentTimeMillis() + 10000
         val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 15)
-            set(Calendar.MINUTE, 30)
+            timeInMillis
         }
 
-        val calendarAlarmIntent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
+//        val calendarAlarmIntent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
+//            intent.action = CONST.ALARM_ACTION
+//            intent.putExtra("TYPE", CONST.BIRTHDAY)
+//            intent.putExtra("name", "temp name")
+//            intent.putExtra("birthday", timeInMillis.toString())
+//            PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+//        }
+        val intent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
             intent.action = CONST.ALARM_ACTION
-            PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            intent.putExtra("_type", CONST.BIRTHDAY)
+            intent.putExtra("name", "temp test name")
+            intent.putExtra("birthday", timeInMillis.toString())
         }
+        val calendarAlarmIntent = PendingIntent.getBroadcast(mContext, 500, intent, PendingIntent.FLAG_IMMUTABLE)
 
         amMgr?.setRepeating(
             AlarmManager.RTC_WAKEUP,
@@ -398,32 +407,46 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     // 利用日历设置闹钟
     private fun setCalendarAlarm(user: User, index: Int) {
         user.events.forEach {
-            val birthday = it.data;
+            var birthday = it.data;
+            var label = it.label
             if (birthday != null) {
-                val year = 2022;
-                val month = birthday.substring(4, 6);
-                val date = birthday.substring(6, 8);
+                val date: Date = DateUtil.date()
+                val year = DateUtil.year(date)
+                var month = birthday.substring(4, 6).toInt();
+                var day = birthday.substring(6, 8).toInt();
+                if (label.equals("Lunar birthday")) {
+                    // 根据当前年+农历月、日计算当前的公历生日
+                    val chineseDate = ChineseDate(year, month, day);
+                    month = chineseDate.gregorianMonth + 1 // 返回的月份已经是从0开始了
+                    day = chineseDate.gregorianDay
+                }
+
                 val amMgr = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
                 val currentDate = Calendar.getInstance()
+                currentDate.set(Calendar.HOUR_OF_DAY, 0)
+                currentDate.set(Calendar.MINUTE, 0)
+                currentDate.set(Calendar.SECOND, 0)
+
                 val calendar: Calendar = Calendar.getInstance().apply {
-                    set(Calendar.MONTH, month.toInt() - 1) // 从0开始，即1月份为0 12月份为11
-                    set(Calendar.DATE, date.toInt())
-                    set(Calendar.HOUR_OF_DAY, 22);
-                    set(Calendar.MINUTE, 0);
+                    set(Calendar.MONTH, month - 1) // 从0开始，即1月份为0 12月份为11
+                    set(Calendar.DATE, day)
+                    set(Calendar.HOUR_OF_DAY, 23);
+                    set(Calendar.MINUTE, 23);
+                    Log.i("ALARM_DATE", user.name + ": " + year + "年" + month + "月" + day + "日")
                     if (this.before(currentDate)) {
                         set(Calendar.YEAR, year + 1)
-                        Log.i("ALARM_EXPIRES", user.name + ": " + year + month + date)
+                        Log.i("ALARM_DATE", user.name + " EXPIRED")
                     }
                 }
                 val intent = Intent(mContext, AlarmReceiver::class.java).let { intent ->
                     intent.action = CONST.ALARM_ACTION
-                    intent.putExtra("TYPE", CONST.BIRTHDAY)
+                    intent.putExtra("_type", CONST.BIRTHDAY)
                     intent.putExtra("name", user.name)
                     intent.putExtra("birthday", birthday)
                 }
                 val pendingAlarmIntent = PendingIntent.getBroadcast(mContext, index + birthday.toInt(), intent, PendingIntent.FLAG_IMMUTABLE)
 
-                Log.i("ALARM", user.name + ": " + year + month + date + " size: " + index +  " ts: " + calendar.timeInMillis)
+                Log.i("ALARM", user.name + ": " + year + month + day + "/" + label + " size: " + index +  " ts: " + calendar.timeInMillis)
                 amMgr.set(
                     AlarmManager.RTC_WAKEUP,
                     calendar.timeInMillis,

@@ -8,8 +8,9 @@ import androidx.core.app.NotificationManagerCompat
 
 class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(mContent: Context, intent: Intent?) {
+        Log.i("ALARM_onReceive", intent!!.getAction() + "_" + intent.getStringExtra("_type"))
         if (CONST.ALARM_ACTION.equals(intent!!.getAction())) {
-            when(intent.getStringExtra("type")) {
+            when(intent.getStringExtra("_type")) {
                 CONST.BIRTHDAY -> { // 生日提醒
                     val name = intent.getStringExtra("name")
                     val birthday = intent.getStringExtra("birthday")
