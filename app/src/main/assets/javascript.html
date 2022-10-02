@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>JS</title>
+
+
+</head>
+<body>
+<div id="abc">#abc content</div>
+</body>
+<script>
+        function callJS(){
+            document.querySelector('#abc').innerText = "changed";
+            callAndroid();
+              alert("Android调用了JS的callJS方法");
+        }
+
+        function callAndroid() {
+              var testVal = 'toast text';
+              AndroidFunction.showToast(testVal);
+           }
+    </script>
+</html>
