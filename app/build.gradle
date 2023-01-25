@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.daozhao.hello"
         minSdkVersion 22
-        targetSdkVersion 32
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
 
@@ -20,13 +20,13 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('/Users/shadow/OneDrive/DevBase/Android/hello.jks')
+            storeFile file('/Users/shadow/Dev/hello_daozhao/app/hello.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
             storePassword 'Ohmylady3'
         }
         debug {
-            storeFile file('/Users/shadow/OneDrive/DevBase/Android/hello.jks')
+            storeFile file('/Users/shadow/Dev/hello_daozhao/app/hello.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
             storePassword 'Ohmylady3'
@@ -67,6 +67,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    // HMS Push kit
+    implementation 'com.huawei.hms:push:6.3.0.302'
+    // HMS Core SDK
+    implementation 'com.huawei.hms:hmscoreinstaller:6.6.0.300'
+    implementation 'com.huawei.hms:hwid:6.9.0.301'
     // HMS Push kit
     implementation 'com.huawei.hms:push:6.3.0.302'
 
