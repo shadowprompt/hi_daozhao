@@ -20,12 +20,7 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('/Users/shadow/Dev/hello_daozhao/app/hello.jks')
-            keyPassword 'Ohmylady3'
-            keyAlias = 'key0'
-            storePassword 'Ohmylady3'
-        }
-        debug {
+            // 根据您实际的签名信息，替换以下参数中的xxxx
             storeFile file('/Users/shadow/Dev/hello_daozhao/app/hello.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
@@ -34,7 +29,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            signingConfig signingConfigs.config
+        }
         release {
+            signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -67,13 +66,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    // HMS Push kit
-    implementation 'com.huawei.hms:push:6.3.0.302'
     // HMS Core SDK
+    // （可选）如果您集成了Push SDK 6.7.0.300及以上版本，可在“dependencies”中添加HMS Core Installer SDK编译依赖，自动引导用户下载HMS Core APK。
     implementation 'com.huawei.hms:hmscoreinstaller:6.6.0.300'
     implementation 'com.huawei.hms:hwid:6.9.0.301'
     // HMS Push kit
-    implementation 'com.huawei.hms:push:6.3.0.302'
+    implementation 'com.huawei.hms:push:6.7.0.300'
 
     implementation 'com.squareup.okhttp3:okhttp:3.6.0'
 
