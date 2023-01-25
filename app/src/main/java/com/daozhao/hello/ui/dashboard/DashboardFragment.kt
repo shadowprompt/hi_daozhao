@@ -22,6 +22,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.hutool.core.date.ChineseDate
 import cn.hutool.core.date.DateUtil
+import cn.hutool.http.HttpUtil
 import com.daozhao.hello.*
 import com.daozhao.hello.databinding.FragmentDashboardBinding
 import com.google.firebase.FirebaseApp
@@ -89,7 +90,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             val bundle = intent?.extras
             if (bundle?.getString("msg") != null) {
                 val content = bundle.getString("msg")
-                showLog(content);
+                textLog(content);
             }
         }
     }
@@ -162,7 +163,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     }
 
     private fun getToken() {
-        showLog("getToken:begin")
+        textLog("getToken:begin")
         object : Thread() {
             override fun run() {
                 try {
@@ -172,16 +173,14 @@ class DashboardFragment : Fragment(), View.OnClickListener {
                     val token = HmsInstanceId.getInstance(mContext).getToken(appId, "HCM")
                     storeTokenProfile(token)
                 } catch (e: ApiException) {
-                    Log.e(TAG, "get token failed, $e")
-                    showLog("get token failed, $e")
+                    textLog("get token failed, $e", true)
                 }
             }
         }.start()
     }
 
     private fun storeTokenProfile(token: String?) {
-        Log.i(TAG, "get token:$token")
-        showLog("get token:$token")
+        textLog("get token:$token")
         if (!TextUtils.isEmpty(token)) {
             sendRegTokenToServer(token);
             // 添加当前设备上的用户与应用的关系。
@@ -191,9 +190,9 @@ class DashboardFragment : Fragment(), View.OnClickListener {
                     .addOnCompleteListener { task ->
                         // 获取结果
                         if (task.isSuccessful){
-                            Log.i(TAG, "add profile success.")
+                            textLog("add profile success. token: $token")
                         } else{
-                            Log.e(TAG, "add profile failed: " + task.exception.message)
+                            textLog("add profile failed: " + task.exception.message, true)
                         }
                     }
             }
@@ -201,23 +200,23 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     }
 
     private fun setReceiveNotifyMsg(enable: Boolean) {
-        showLog("Control the display of notification messages:begin")
+        textLog("Control the display of notification messages:begin")
         if (enable) {
             HmsMessaging.getInstance(mContext).turnOnPush().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    showLog("turnOnPush Complete")
+                    textLog("turnOnPush Complete")
                     status = false;
                 } else {
-                    showLog("turnOnPush failed: cause=" + task.exception.message)
+                    textLog("turnOnPush failed: cause=" + task.exception.message)
                 }
             }
         } else {
             HmsMessaging.getInstance(mContext).turnOffPush().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    showLog("turnOffPush Complete")
+                    textLog("turnOffPush Complete")
                     status = true;
                 } else {
-                    showLog("turnOffPush  failed: cause =" + task.exception.message)
+                    textLog("turnOffPush  failed: cause =" + task.exception.message)
                 }
             }
         }
@@ -246,7 +245,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         val intentUri = intent.toUri(Intent.URI_INTENT_SCHEME)
         // The value of intentUri will be assigned to the intent parameter in the message to be sent.
         Log.d("intentUri", intentUri)
-        showLog(intentUri)
+        textLog(intentUri)
 
         // You can start the deep link activity with the following code.
         intent.setClass(mContext!!, DeeplinkActivity::class.java);
@@ -273,7 +272,13 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             run {
                 if (it.isComplete) {
                     var uuid = it.result.toString();
-                    showLog("uuid complete " + uuid);
+                    textLog("uuid complete " + uuid);
+                    // 用hutool发送请求
+//                    val paramMap: HashMap<String, Any> = HashMap()
+//                    paramMap["id"] = uuid
+//                    paramMap["pushToken"] = token.toString()
+//                    val result = HttpUtil.post("https://gateway.daozhao.com.cn/HMS/storePushToken", paramMap)
+//                    textLog("post result " + result)
 
                     var formBody: FormBody.Builder = FormBody.Builder();
                     formBody.add("id", uuid);
@@ -285,15 +290,13 @@ class DashboardFragment : Fragment(), View.OnClickListener {
                     val call: Call = client.newCall(request)
                     call.enqueue(object : Callback {
                         override fun onFailure(call: Call?, e: IOException?) {
-                            showLog("fetch failed " + uuid)
-                            Log.e(TAG, "fetch failed " + uuid);
+                            textLog("fetch failed: " + uuid + " token: " + token, true)
                         }
 
                         @Throws(IOException::class)
                         override fun onResponse(call: Call?, response: Response) {
                             val result: String = response.body().string()
-                            showLog("fetch success " + uuid)
-                            Log.i(TAG, "fetch success " + uuid);
+                            textLog("fetch success: " + uuid + " token: " + token)
                         }
                     })
                 }
@@ -303,7 +306,13 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     }
 
 
-    fun showLog(log: String?) {
+    // 记log 并宰文本框内显示出来
+    fun textLog(log: String?, isError: Boolean = false) {
+        if (isError == true) {
+            Log.e(TAG, log.toString())
+        } else {
+            Log.i(TAG, log.toString())
+        }
         activity?.runOnUiThread {
             val textView = root!!.findViewById<TextView?>(R.id.text_dashboard)
             textView.text = log
@@ -369,7 +378,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             PendingIntent.getBroadcast(mContext, 0, intent, PendingIntent.FLAG_IMMUTABLE)
         }
 
-        amMgr?.setRepeating(
+        amMgr.setRepeating(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
             triggerAtMillis,
             60000,
@@ -397,7 +406,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         }
         val calendarAlarmIntent = PendingIntent.getBroadcast(mContext, 500, intent, PendingIntent.FLAG_IMMUTABLE)
 
-        amMgr?.setRepeating(
+        amMgr.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
             1000 * 60 * 1,
