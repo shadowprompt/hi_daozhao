@@ -13,14 +13,13 @@ android {
         minSdkVersion 22
         targetSdkVersion 31
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         config {
-            // 根据您实际的签名信息，替换以下参数中的xxxx
             storeFile file('/Users/shadow/Dev/hello_daozhao/app/hello.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
@@ -36,6 +35,11 @@ android {
             signingConfig signingConfigs.config
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "Hello Daozhao_${variant.name}_${variant.versionName}_${new Date().format('yyyyMMdd')}.apk"
+                }
+            }
         }
     }
     compileOptions {
