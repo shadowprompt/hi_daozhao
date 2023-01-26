@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -40,6 +41,10 @@ class DaozhaoActivity : AppCompatActivity() {
 //                    Utils.saveData(context!!, "test", "msgList", msgData)
                     val res = Utils.getData(context, "test", "msgList");
                     Log.e(TAG, res!!)
+                    // HMS的透传消息
+                    if (bundle?.getString("msgType") == "HMS") {
+                        showMsgViaStatusBar(context!!, bundle)
+                    }
                 };
             }
         }
@@ -175,6 +180,14 @@ class DaozhaoActivity : AppCompatActivity() {
         viewModel.activeUrl.observe(this, Observer<String>{ it ->
             Log.i(TAG, it);
         })
+    }
+    // 将消息通过通知栏显示
+    fun showMsgViaStatusBar(context: Context, bundle: Bundle) {
+        val msgData = bundle.getString("msgData");
+        val msg = Gson().fromJson(msgData, Msg::class.java);
+        var builder = Utils.noticeBuilder( context, msg.title, msg.body, "这是个很长的问题在")
+
+        NotificationManagerCompat.from(context).notify(0, builder.build())
     }
     companion object {
         private const val TAG: String = "DaozhaoActivity"
