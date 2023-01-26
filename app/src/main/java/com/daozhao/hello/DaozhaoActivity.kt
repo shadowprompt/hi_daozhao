@@ -185,9 +185,11 @@ class DaozhaoActivity : AppCompatActivity() {
     fun showMsgViaStatusBar(context: Context, bundle: Bundle) {
         val msgData = bundle.getString("msgData");
         val msg = Gson().fromJson(msgData, Msg::class.java);
-        var builder = Utils.noticeBuilder( context, msg.title, msg.body, "这是个很长的问题在")
+        var builder = Utils.noticeBuilder( context, msg.title, msg.body, msg.body)
+        // 采用不同的notifyId，避免覆盖
+        val notifyId = ((System.currentTimeMillis() + Math.random()) * 10000).toInt()
 
-        NotificationManagerCompat.from(context).notify(0, builder.build())
+        NotificationManagerCompat.from(context).notify(notifyId, builder.build())
     }
     companion object {
         private const val TAG: String = "DaozhaoActivity"
