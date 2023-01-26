@@ -134,8 +134,11 @@ class DaozhaoPushService : HmsMessageService() {
         intent.action = CODELABS_ACTION
         intent.putExtra("method", "onMessageReceived")
         intent.putExtra("msg", "onMessageReceived called, message id:" + message.messageId)
+        intent.putExtra("msgType", "HMS")
         intent.putExtra("msgData", message.data)
+        // 将HMS消息转换成广播自行处理
         sendBroadcast(intent)
+
         val judgeWhetherIn10s = false
 
         // If the messages are not processed in 10 seconds, the app needs to use WorkManager for processing.
