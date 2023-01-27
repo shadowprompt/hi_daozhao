@@ -187,7 +187,7 @@ class DaozhaoActivity : AppCompatActivity() {
         val msg = Gson().fromJson(msgData, Msg::class.java);
         var builder = Utils.noticeBuilder( context, msg.title, msg.body, msg.body)
         // 采用不同的notifyId，避免覆盖
-        val notifyId = ((System.currentTimeMillis() + Math.random()) * 10000).toInt()
+        val notifyId = System.currentTimeMillis().toInt()
 
         NotificationManagerCompat.from(context).notify(notifyId, builder.build())
     }
