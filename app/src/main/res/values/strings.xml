@@ -7,5 +7,6 @@
     <string name="title_notifications">Notifications</string>
     <string name="deep_link">This is the deep link page.</string>
     <string name="deep2_link">This is the target activity when you tap notification messages.</string>
-    <string name="open_page_by_action">Open Page by Action</string>
+    <string name="open_page_by_action">Open Page by Action</string>account_auth_provider
+    <string name="account_auth_provider">Account auth provider</string>
 </resources>
