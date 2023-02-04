@@ -23,8 +23,8 @@ import androidx.lifecycle.ViewModelProvider
 import cn.hutool.core.date.ChineseDate
 import cn.hutool.core.date.DateUtil
 import com.daozhao.hello.*
-import com.daozhao.hello.ui.activity.Deeplink2Activity
-import com.daozhao.hello.ui.activity.DeeplinkActivity
+import com.daozhao.hello.activity.Deeplink2Activity
+import com.daozhao.hello.activity.DeeplinkActivity
 import com.daozhao.hello.databinding.FragmentDashboardBinding
 import com.daozhao.hello.model.UrlViewModel
 import com.daozhao.hello.model.User

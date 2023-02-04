@@ -34,7 +34,7 @@
             android:name="push_kit_auto_init_enabled"
             android:value="false" />
 
-        <activity android:name="com.daozhao.hello.ui.activity.Deeplink2Activity" android:exported="true">
+        <activity android:name="com.daozhao.hello.activity.Deeplink2Activity" android:exported="true">
             <intent-filter>
                 <action android:name="com.daozhao.push.action" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.daozhao.hello.ui.activity.DeeplinkActivity" android:exported="true">
+        <activity android:name="com.daozhao.hello.activity.DeeplinkActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -55,7 +55,7 @@
         </activity>
 
         <activity
-            android:name="com.daozhao.hello.ui.activity.DaozhaoActivity"
+            android:name="com.daozhao.hello.activity.DaozhaoActivity"
             android:exported="true"
             android:label="@string/title_activity_daozhao">
             <intent-filter>

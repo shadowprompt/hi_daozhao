@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.daozhao.hello.ui.activity;
+package com.daozhao.hello.activity;
 
 import android.app.Activity;
 import android.content.Intent;
