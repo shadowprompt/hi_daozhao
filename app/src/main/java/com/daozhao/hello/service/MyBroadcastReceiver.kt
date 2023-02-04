@@ -1,12 +1,10 @@
-package com.daozhao.hello
+package com.daozhao.hello.service
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-
-private const val TAG = "MyBroadcastReceiver"
 
 class MyBroadcastReceiver : BroadcastReceiver() {
 
@@ -19,5 +17,9 @@ class MyBroadcastReceiver : BroadcastReceiver() {
                 Toast.makeText(context, log, Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    companion object {
+        val TAG = "MyBroadcastReceiver"
     }
 }

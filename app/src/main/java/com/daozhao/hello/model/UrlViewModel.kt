@@ -1,4 +1,4 @@
-package com.daozhao.hello
+package com.daozhao.hello.model
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.MutableLiveData as MutableLiveData1

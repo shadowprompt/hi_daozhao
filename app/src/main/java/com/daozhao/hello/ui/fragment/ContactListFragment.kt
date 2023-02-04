@@ -1,6 +1,5 @@
-package com.daozhao.hello
+package com.daozhao.hello.ui.fragment
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
@@ -16,7 +15,13 @@ import android.widget.*
 import androidx.loader.app.LoaderManager
 import androidx.loader.content.CursorLoader
 import androidx.loader.content.Loader
+import com.daozhao.hello.R
+import com.daozhao.hello.Utils
 import com.daozhao.hello.databinding.FragmentContactListBinding
+import com.daozhao.hello.model.Msg
+import com.daozhao.hello.model.User
+import com.daozhao.hello.model.UserEvent
+import com.daozhao.hello.model.UserPhone
 import com.daozhao.hello.ui.ListAdapter
 import com.google.gson.Gson
 

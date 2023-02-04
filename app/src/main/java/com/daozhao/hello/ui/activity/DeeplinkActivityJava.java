@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package com.daozhao.hello;
+package com.daozhao.hello.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -22,6 +22,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.daozhao.hello.R;
 
 /**
  * Opening a Specified Page of an App, and Receive data in the customized Activity class.

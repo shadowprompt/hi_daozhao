@@ -1,4 +1,4 @@
-package com.daozhao.hello
+package com.daozhao.hello.model
 
 data class User (val key: String, val id: String, val name: String, val phones: ArrayList<UserPhone>, var events: ArrayList<UserEvent>, val note: String?) {
 

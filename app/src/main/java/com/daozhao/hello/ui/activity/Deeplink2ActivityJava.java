@@ -14,13 +14,15 @@
  *  limitations under the License.
  */
 
-package com.daozhao.hello;
+package com.daozhao.hello.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.daozhao.hello.R;
 
 public class Deeplink2ActivityJava extends AppCompatActivity {
     private static final String TAG = "PushDemoLog";

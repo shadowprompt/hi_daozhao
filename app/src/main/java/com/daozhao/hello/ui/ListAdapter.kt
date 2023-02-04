@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
-import com.daozhao.hello.Msg
+import com.daozhao.hello.model.Msg
 import com.daozhao.hello.R
 
 class ListAdapter(val context: Context, var data: List<Msg>) : BaseAdapter() {

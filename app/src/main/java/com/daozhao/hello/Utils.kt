@@ -5,6 +5,7 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
+import com.daozhao.hello.model.Msg
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 

@@ -1,10 +1,12 @@
-package com.daozhao.hello
+package com.daozhao.hello.service
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
+import com.daozhao.hello.CONST
+import com.daozhao.hello.Utils
 
 class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(mContent: Context, intent: Intent?) {
@@ -16,7 +18,12 @@ class AlarmReceiver: BroadcastReceiver() {
                     val birthday = intent.getStringExtra("birthday")
                     val text = "hello alarm $name"
                     Log.i("ALARM_SHOW", text)
-                    val builder = Utils.noticeBuilder(mContent, "Happy birthday", "date: $birthday", "Have a nice day!")
+                    val builder = Utils.noticeBuilder(
+                        mContent,
+                        "Happy birthday",
+                        "date: $birthday",
+                        "Have a nice day!"
+                    )
 
                     NotificationManagerCompat.from(mContent).notify(0, builder.build())
                 }

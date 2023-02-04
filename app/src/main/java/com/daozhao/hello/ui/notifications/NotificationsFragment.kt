@@ -2,14 +2,13 @@ package com.daozhao.hello.ui.notifications
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.daozhao.hello.Msg
+import com.daozhao.hello.model.Msg
 import com.daozhao.hello.Utils
 import com.daozhao.hello.databinding.FragmentNotificationsBinding
 import com.daozhao.hello.ui.ListAdapter

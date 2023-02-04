@@ -1,9 +1,10 @@
-package com.daozhao.hello
+package com.daozhao.hello.ui.activity
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.daozhao.hello.R
 
 class Deeplink2Activity: AppCompatActivity () {
 

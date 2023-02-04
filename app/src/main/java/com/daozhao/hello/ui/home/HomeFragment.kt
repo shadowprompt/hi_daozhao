@@ -15,7 +15,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.daozhao.hello.R
-import com.daozhao.hello.UrlViewModel
+import com.daozhao.hello.model.UrlViewModel
 import com.daozhao.hello.databinding.FragmentHomeBinding
 
 

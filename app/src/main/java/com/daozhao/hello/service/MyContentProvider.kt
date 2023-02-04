@@ -1,4 +1,4 @@
-package com.daozhao.hello
+package com.daozhao.hello.service
 
 import android.content.ContentProvider
 import android.content.ContentValues

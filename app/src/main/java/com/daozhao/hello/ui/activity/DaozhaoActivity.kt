@@ -1,4 +1,4 @@
-package com.daozhao.hello
+package com.daozhao.hello.ui.activity
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,6 +15,10 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.daozhao.hello.model.Msg
+import com.daozhao.hello.R
+import com.daozhao.hello.model.UrlViewModel
+import com.daozhao.hello.Utils
 import com.daozhao.hello.databinding.ActivityDaozhaoBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
@@ -63,7 +67,10 @@ class DaozhaoActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications, R.id.navigation_discovery
+                R.id.navigation_home,
+                R.id.navigation_dashboard,
+                R.id.navigation_notifications,
+                R.id.navigation_discovery
             )
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -185,7 +192,7 @@ class DaozhaoActivity : AppCompatActivity() {
     fun showMsgViaStatusBar(context: Context, bundle: Bundle) {
         val msgData = bundle.getString("msgData");
         val msg = Gson().fromJson(msgData, Msg::class.java);
-        var builder = Utils.noticeBuilder( context, msg.title, msg.body, msg.body)
+        var builder = Utils.noticeBuilder(context, msg.title, msg.body, msg.body)
         // 采用不同的notifyId，避免覆盖
         val notifyId = System.currentTimeMillis().toInt()
 

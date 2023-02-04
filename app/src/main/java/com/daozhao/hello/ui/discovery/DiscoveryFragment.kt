@@ -20,6 +20,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.loader.app.LoaderManager
 import com.daozhao.hello.*
 import com.daozhao.hello.databinding.FragmentDiscoveryBinding
+import com.daozhao.hello.ui.fragment.ContactListFragment
 
 
 // The column index for the _ID column

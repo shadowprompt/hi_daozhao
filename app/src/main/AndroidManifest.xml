@@ -34,7 +34,7 @@
             android:name="push_kit_auto_init_enabled"
             android:value="false" />
 
-        <activity android:name="com.daozhao.hello.Deeplink2Activity" android:exported="true">
+        <activity android:name="com.daozhao.hello.ui.activity.Deeplink2Activity" android:exported="true">
             <intent-filter>
                 <action android:name="com.daozhao.push.action" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -42,7 +42,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.daozhao.hello.DeeplinkActivity" android:exported="true">
+        <activity android:name="com.daozhao.hello.ui.activity.DeeplinkActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -55,7 +55,7 @@
         </activity>
 
         <activity
-            android:name="com.daozhao.hello.DaozhaoActivity"
+            android:name="com.daozhao.hello.ui.activity.DaozhaoActivity"
             android:exported="true"
             android:label="@string/title_activity_daozhao">
             <intent-filter>
@@ -64,20 +64,20 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".DaozhaoPushService" android:exported="false">
+        <service android:name=".service.DaozhaoPushService" android:exported="false">
             <intent-filter>
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <provider
-            android:name=".MyContentProvider"
+            android:name=".service.MyContentProvider"
             android:authorities="@string/account_auth_provider"
             android:exported="false"
             android:syncable="true"/>
 
         <service
-            android:name=".MySyncService"
+            android:name=".service.MySyncService"
             android:exported="true"
             android:process=":core"
             tools:ignore="Instantiatable">
@@ -89,14 +89,14 @@
                 android:resource="@xml/syncadapter"/>
         </service>
 
-        <receiver android:name=".MyBroadcastReceiver"  android:exported="true">
+        <receiver android:name=".service.MyBroadcastReceiver"  android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".AlarmReceiver" android:exported="true">
+        <receiver android:name=".service.AlarmReceiver" android:exported="true">
             <intent-filter>
                 <action android:name="com.daozhao.alarm.schedule.action" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

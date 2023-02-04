@@ -13,7 +13,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.daozhao.hello
+package com.daozhao.hello.service
 
 import android.content.Intent
 import android.os.IBinder
@@ -68,7 +68,8 @@ class DaozhaoPushService : HmsMessageService() {
         // getOriginalUrgency() Obtains the original priority of a message.
         // getSentTime() Obtains the time when a message is sent from the server.
         // getTo() Obtains the recipient of a message.
-        Log.i(TAG, """getCollapseKey: ${message.collapseKey}
+        Log.i(
+            TAG, """getCollapseKey: ${message.collapseKey}
             getData: ${message.data}
             getFrom: ${message.from}
             getTo: ${message.to}
@@ -100,7 +101,8 @@ class DaozhaoPushService : HmsMessageService() {
         // getNotifyId() Obtains the unique ID of a message
         val notification = message.notification
         if (notification != null) {
-            Log.i(TAG, """
+            Log.i(
+                TAG, """
                 getTitle: ${notification.title}
                 getTitleLocalizationKey: ${notification.titleLocalizationKey}
                 getTitleLocalizationArgs: ${Arrays.toString(notification.titleLocalizationArgs)}
@@ -168,7 +170,8 @@ class DaozhaoPushService : HmsMessageService() {
     }
 
     override fun onSendError(msgId: String?, exception: Exception?) {
-        Log.i(TAG, "onSendError called, message id:$msgId, ErrCode:${(exception as SendException).errorCode}, " +
+        Log.i(
+            TAG, "onSendError called, message id:$msgId, ErrCode:${(exception as SendException).errorCode}, " +
                 "description:${exception.message}")
         val intent = Intent()
         intent.action = CODELABS_ACTION
