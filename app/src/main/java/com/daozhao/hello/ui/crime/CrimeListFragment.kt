@@ -1,6 +1,7 @@
 package com.daozhao.hello.ui.crime
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -115,7 +116,9 @@ class CrimeListFragment: Fragment() {
         fun bind(crime: Crime) {
             this.crime = crime
             titleTextView.text = this.crime.title
+            titleTextView.setTextColor(Color.parseColor("#000000"))
             dateTextView.text = this.crime.date.toString()
+            dateTextView.setTextColor(Color.parseColor("#000000"))
         }
     }
 
@@ -129,7 +132,6 @@ class CrimeListFragment: Fragment() {
                 R.layout.list_item_crime_requires_police
             }
             val view = layoutInflater.inflate(resourceId, parent, false)
-
             return CrimeHolder(view)
         }
         // 将数据集中指定数据填充到ViewHolder视图显示
