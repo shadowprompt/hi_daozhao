@@ -41,6 +41,15 @@
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <Button
+        android:id="@+id/btn_criminal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/crime"
+        app:layout_constraintTop_toBottomOf="@id/btn_generate_intent2"
+        android:layout_marginLeft="8sp"
+        app:layout_constraintLeft_toRightOf="@id/btn_action2" />
+
+    <Button
         android:id="@+id/btn_web2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

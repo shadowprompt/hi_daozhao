@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModelProvider
 import cn.hutool.core.date.ChineseDate
 import cn.hutool.core.date.DateUtil
 import com.daozhao.hello.*
+import com.daozhao.hello.activity.CriminalActivity
 import com.daozhao.hello.activity.Deeplink2Activity
 import com.daozhao.hello.activity.DeeplinkActivity
 import com.daozhao.hello.databinding.FragmentDashboardBinding
@@ -140,6 +141,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         (root as ConstraintLayout).findViewById<Button>(R.id.toggle2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_generate_intent2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_action2).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_criminal).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_web2).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_getContact).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.jd).setOnClickListener(this)
@@ -270,6 +272,14 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         startActivity(intent)
     }
 
+    private fun openCriminalActivity() {
+        val intent = Intent(CONST.DATABASE_ACTION)
+
+        // You can start the deep link activity with the following code.
+        intent.setClass(mContext!!, CriminalActivity::class.java)
+        startActivity(intent)
+    }
+
 
     private fun sendRegTokenToServer(token: String?) {
         Log.i(TAG, "sending token to server. token:$token")
@@ -287,7 +297,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
                     var formBody: FormBody.Builder = FormBody.Builder();
                     formBody.add("id", uuid);
-                    formBody.add("pushToken",token);
+                    formBody.add("pushToken",token.toString());
                     val request: Request = Request.Builder()
                         .url("https://gateway.daozhao.com.cn/HMS/storePushToken")
                         .post(formBody.build())
@@ -615,6 +625,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.toggle2 -> setReceiveNotifyMsg(status)
             R.id.btn_generate_intent2 -> generateIntentUri()
             R.id.btn_action2 -> openActivityByAction()
+            R.id.btn_criminal -> openCriminalActivity()
             R.id.btn_web2 -> openWeb()
             R.id.btn_showNotice -> showNotice()
             R.id.btn_showAlarm -> showAlarm()

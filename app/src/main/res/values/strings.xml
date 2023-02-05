@@ -9,4 +9,18 @@
     <string name="deep2_link">This is the target activity when you tap notification messages.</string>
     <string name="open_page_by_action">Open Page by Action</string>account_auth_provider
     <string name="account_auth_provider">Account auth provider</string>
+    <string name="default_content">DefaultContent</string>
+    <string name="crime">Crime</string>
+    <string name="new_crime">New crime</string>
+    <string name="crime_title_hint">Enter a title for the crime.</string>
+    <string name="crime_title_label">Title</string>
+    <string name="crime_details_label">Details</string>
+    <string name="crime_solved_label">Solved</string>
+    <string name="crime_list">Crime List</string>
+
+<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+<!--        <item name="colorPrimary">@color/coloPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/coloPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/coloAccent</item>-->
+<!--    </style>-->
 </resources>
