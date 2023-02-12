@@ -22,7 +22,7 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('/Users/shadow/Dev/hello_daozhao/app/hello.jks')
+            storeFile file('hello.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
             storePassword 'Ohmylady3'
