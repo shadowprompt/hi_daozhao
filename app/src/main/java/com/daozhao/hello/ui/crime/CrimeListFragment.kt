@@ -8,6 +8,8 @@ import android.view.*
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.daozhao.hello.R
 import com.daozhao.hello.model.Crime
 import com.daozhao.hello.model.CrimeListViewModel
+import kotlinx.android.synthetic.main.activity_crime.*
 import java.util.UUID
 
 class CrimeListFragment: Fragment() {
@@ -28,9 +31,15 @@ class CrimeListFragment: Fragment() {
         ViewModelProvider(this).get(CrimeListViewModel::class.java)
     }
 
+    private var toolbar: Toolbar ? = null;
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callback = context as Callback
+
+        val appCompactActivity = requireActivity() as AppCompatActivity
+
+        toolbar = appCompactActivity.toolbar;
     }
 
     override fun onDetach() {
@@ -84,10 +93,12 @@ class CrimeListFragment: Fragment() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            // 点击上面的+号  新增记录
             R.id.new_crime -> {
                 var crime = Crime()
                 crimeListViewModel.addCrime(crime)
                 callback?.onCrimeSelected(crime.id)
+                toolbar?.setTitle("abc")
                 true
             } else -> {
                 return super.onOptionsItemSelected(item)
@@ -153,6 +164,7 @@ class CrimeListFragment: Fragment() {
         }
     }
 
+    // 定义一个选中当前Crime的回调
     interface Callback {
         fun onCrimeSelected(crimeId: UUID)
     }

@@ -18,9 +18,11 @@
     <string name="crime_solved_label">Solved</string>
     <string name="crime_list">Crime List</string>
 
-<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-<!--        <item name="colorPrimary">@color/coloPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/coloPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/coloAccent</item>-->
-<!--    </style>-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+
+    </style>
+    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
