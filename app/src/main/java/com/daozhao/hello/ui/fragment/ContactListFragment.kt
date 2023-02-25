@@ -152,7 +152,7 @@ class ContactListFragment : Fragment(), AdapterView.OnItemClickListener, LoaderM
     }
 
     fun initDataFromMock() {
-        val adapter = ListAdapter(requireContext(), arrayListOf(Msg("test", "body", "timeee")))
+        val adapter = ListAdapter(requireContext(), arrayListOf(Msg("test", "body", "time")))
         contactsList!!.adapter = adapter
     }
 

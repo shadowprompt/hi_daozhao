@@ -18,9 +18,28 @@
     <string name="crime_solved_label">Solved</string>
     <string name="crime_list">Crime List</string>
 
-<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-<!--        <item name="colorPrimary">@color/coloPrimary</item>-->
-<!--        <item name="colorPrimaryDark">@color/coloPrimaryDark</item>-->
-<!--        <item name="colorAccent">@color/coloAccent</item>-->
-<!--    </style>-->
+    <string name="crime_suspect_text">Choose Suspect</string>
+    <string name="crime_report_text">Send Crime report</string>
+    <string name="crime_report">%1$s!
+        The Crime was discovered on %2$s, %3$s and %4$s
+    </string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is unsolved</string>
+    <string name="crime_report_no_suspect">There is no suspect</string>
+    <string name="crime_report_suspect">The suspect is %s</string>
+    <string name="crime_report_subject">CriminalIntent Crime Report</string>
+    <string name="send_report">Send report via</string>
+
+    <string name="make_call">Make a call</string>
+
+    <!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
+    <!--        <item name="colorPrimary">@color/coloPrimary</item>-->
+    <!--        <item name="colorPrimaryDark">@color/coloPrimaryDark</item>-->
+    <!--        <item name="colorAccent">@color/coloAccent</item>-->
+    <!--    </style>-->
+
+    <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>

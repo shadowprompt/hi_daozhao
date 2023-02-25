@@ -1,16 +1,20 @@
 package com.daozhao.hello.activity
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -20,12 +24,17 @@ import com.daozhao.hello.R
 import com.daozhao.hello.model.UrlViewModel
 import com.daozhao.hello.Utils
 import com.daozhao.hello.databinding.ActivityDaozhaoBinding
+import com.daozhao.hello.model.Crime
+import com.daozhao.hello.model.CrimeListViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import java.text.ParsePosition
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashSet
 
 class DaozhaoActivity : AppCompatActivity() {
 
@@ -33,6 +42,10 @@ class DaozhaoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDaozhaoBinding
 
     private val viewModel: UrlViewModel by viewModels()
+
+    private val crimeListViewModel: CrimeListViewModel by lazy {
+        ViewModelProvider(this).get(CrimeListViewModel::class.java)
+    }
 
     inner class MyReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -44,6 +57,9 @@ class DaozhaoActivity : AppCompatActivity() {
                     updateLog(context!!, msgData)
 //                    Utils.saveData(context!!, "test", "msgList", msgData)
                     val res = Utils.getData(context, "test", "msgList");
+                    val msg = Gson().fromJson(msgData, Msg::class.java);
+                    var crime = Crime(UUID.randomUUID(), msg.title)
+                    crimeListViewModel.addCrime(crime)
                     Log.e(TAG, res!!)
                     // HMS的透传消息
                     if (bundle?.getString("msgType") == "HMS") {
@@ -196,6 +212,20 @@ class DaozhaoActivity : AppCompatActivity() {
         // 采用不同的notifyId，避免覆盖
         val notifyId = System.currentTimeMillis().toInt()
 
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         NotificationManagerCompat.from(context).notify(notifyId, builder.build())
     }
     companion object {
