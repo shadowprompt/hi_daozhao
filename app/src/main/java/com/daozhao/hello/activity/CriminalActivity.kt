@@ -2,7 +2,9 @@ package com.daozhao.hello.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.daozhao.hello.R
 import com.daozhao.hello.ui.crime.CrimeFragment
 import com.daozhao.hello.ui.crime.CrimeListFragment
@@ -13,6 +15,9 @@ class CriminalActivity : AppCompatActivity(), CrimeFragment.Callback, CrimeListF
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_crime)
+
+        val toolbar: Toolbar = findViewById<View>(R.id.toolbar) as Toolbar
+        setSupportActionBar(toolbar)
 
         replaceToCrimeListFrag()
     }

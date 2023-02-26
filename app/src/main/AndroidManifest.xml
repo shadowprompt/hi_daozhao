@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.daozhao.hello">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_USER_DICTIONARY" />
@@ -68,6 +69,7 @@
 
         <activity
             android:name="com.daozhao.hello.activity.CriminalActivity"
+            android:theme="@style/NoActionBarTheme"
             android:exported="true"
             android:label="@string/crime">
         </activity>
