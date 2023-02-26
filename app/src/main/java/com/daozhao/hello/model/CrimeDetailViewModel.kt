@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.daozhao.hello.database.CrimeRepository
+import java.io.File
 import java.util.UUID
 
 class CrimeDetailViewModel(): ViewModel() {
@@ -12,8 +13,8 @@ class CrimeDetailViewModel(): ViewModel() {
 
     private val crimeIdLiveData = MutableLiveData<UUID>()
 
-    var crimeLiveData: LiveData<Crime?> = Transformations.switchMap(crimeIdLiveData) { crimeId ->
-        crimeRepository.getCrime(crimeId)
+    var crimeLiveData: LiveData<Crime?> = Transformations.switchMap(crimeIdLiveData) {
+            crimeId -> crimeRepository.getCrime(crimeId)
     }
 
     fun loadCrime(crimeId: UUID) {
@@ -22,5 +23,9 @@ class CrimeDetailViewModel(): ViewModel() {
 
     fun saveCrime(crime: Crime) {
         crimeRepository.updateCrime(crime)
+    }
+
+    fun getPhotoFile(crime: Crime): File {
+        return crimeRepository.getPhotoFile(crime)
     }
 }

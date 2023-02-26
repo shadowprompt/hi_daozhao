@@ -11,4 +11,7 @@ data class Crime(@PrimaryKey val id: UUID = UUID.randomUUID(),
                  var isSolved: Boolean = false,
                  var requiresPolice: Boolean = false,
                  var suspect: String = ""
-)
+) {
+    val photoFileName
+        get() = "IMG_$id.jpg"
+}

@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.daozhao.hello.model.Crime
+import java.io.File
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -18,6 +19,8 @@ class CrimeRepository private constructor(context: Context){
     private val crimeDao = database.crimeDao()
     // 会返回一个执行新线程的executor实例
     private val executor = Executors.newSingleThreadExecutor()
+
+    private val filesDir = context.applicationContext.filesDir
 
 //    fun getCrimes(): List<Crime> = crimeDao.getCrimes()
     fun getCrimes(): LiveData <List<Crime>> = crimeDao.getCrimes()
@@ -53,4 +56,6 @@ class CrimeRepository private constructor(context: Context){
             throw java.lang.IllegalStateException("CrimeRepository must be initialized")
         }
     }
+
+    fun getPhotoFile(crime: Crime): File = File(filesDir, crime.photoFileName)
 }

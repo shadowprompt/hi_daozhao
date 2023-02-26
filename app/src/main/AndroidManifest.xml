@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-feature android:name="android.hardware.camera" android:required="true"/>
     <queries>
         <intent>
             <action android:name="android.intent.action.VIEW"/>
@@ -76,6 +77,17 @@
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+        <provider
+            android:authorities="com.daozhao.hello.fileProvider"
+            android:name="androidx.core.content.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files" />
+        </provider>
 
         <provider
             android:name=".service.MyContentProvider"
