@@ -15,4 +15,6 @@ object CONST {
     const val ARG_CRIME_ID = "crime_id"
     const val ARG_DATE = "date"
     const val DIALOG_DATE = "DialogDate"
+
+    const val DAOZHAO_GATEWAY_SERVER = "https://gateway.daozhao.com.cn"
 }
