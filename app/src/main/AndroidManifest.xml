@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.daozhao.hello">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
@@ -10,20 +11,31 @@
     <uses-permission android:name="android.permission.WRITE_USER_DICTIONARY" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" /> <!-- 接收短信权限 -->
+    <!-- 添加接收系统启动消息（用于开机启动）权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <queries>
         <intent>
-            <action android:name="android.intent.action.VIEW"/>
+            <action android:name="android.intent.action.VIEW" />
+
             <data android:scheme="*" />
         </intent>
         <intent>
-            <action android:name="com.daozhao.alarm.action"/>
+            <action android:name="com.daozhao.alarm.action" />
+
             <data android:scheme="*" />
         </intent>
         <intent>
             <action android:name="com.huawei.hms.core.aidlservice" />
         </intent>
     </queries>
+
     <application
         android:name=".CrimeApplication"
         android:allowBackup="true"
@@ -32,70 +44,77 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloDaozhao">
+        <activity
+            android:name=".SendSmsActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="push_kit_auto_init_enabled"
             android:value="false" />
 
-        <activity android:name="com.daozhao.hello.activity.Deeplink2Activity" android:exported="true">
+        <activity
+            android:name=".Deeplink2Activity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.daozhao.push.action" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.daozhao.hello.activity.DeeplinkActivity" android:exported="true">
+        <activity
+            android:name=".DeeplinkActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="com.daozhao.push.intent"
                     android:path="/deeplink"
                     android:scheme="pushscheme" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.daozhao.hello.activity.DaozhaoActivity"
+            android:name=".DaozhaoActivity"
             android:exported="true"
             android:label="@string/title_activity_daozhao">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="com.daozhao.hello.activity.CriminalActivity"
-            android:theme="@style/NoActionBarTheme"
+            android:name=".CriminalActivity"
             android:exported="true"
-            android:label="@string/crime">
-        </activity>
+            android:label="@string/crime"
+            android:theme="@style/NoActionBarTheme"></activity>
 
-        <service android:name=".service.DaozhaoPushService" android:exported="false">
+        <service
+            android:name=".service.DaozhaoPushService"
+            android:exported="false">
             <intent-filter>
-                <action android:name="com.huawei.push.action.MESSAGING_EVENT"/>
+                <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
         <provider
-            android:authorities="com.daozhao.hello.fileProvider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.daozhao.hello.fileProvider"
             android:exported="false"
-            android:grantUriPermissions="true"
-            >
+            android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/files" />
         </provider>
-
         <provider
             android:name=".service.MyContentProvider"
             android:authorities="@string/account_auth_provider"
             android:exported="false"
-            android:syncable="true"/>
+            android:syncable="true" />
 
         <service
             android:name=".service.MySyncService"
@@ -103,21 +122,36 @@
             android:process=":core"
             tools:ignore="Instantiatable">
             <intent-filter tools:ignore="ExtraText">
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter"/>
+                android:resource="@xml/syncadapter" />
         </service>
 
-        <receiver android:name=".service.MyBroadcastReceiver"  android:exported="true">
+        <receiver
+            android:name=".service.MyBroadcastReceiver"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.INPUT_METHOD_CHANGED" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name=".service.MyBroadcast"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
-        <receiver android:name=".service.AlarmReceiver" android:exported="true">
+        <service android:name=".service.MyService" />
+
+        <receiver
+            android:name=".service.AlarmReceiver"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.daozhao.alarm.schedule.action" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

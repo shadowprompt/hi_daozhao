@@ -19,13 +19,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.daozhao.hello.model.Msg
 import com.daozhao.hello.R
-import com.daozhao.hello.model.UrlViewModel
 import com.daozhao.hello.Utils
 import com.daozhao.hello.databinding.ActivityDaozhaoBinding
 import com.daozhao.hello.model.Crime
 import com.daozhao.hello.model.CrimeListViewModel
+import com.daozhao.hello.model.Msg
+import com.daozhao.hello.model.UrlViewModel
+import com.daozhao.hello.service.MyService
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.gson.Gson
 import com.google.gson.JsonArray
@@ -33,8 +34,6 @@ import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import java.text.ParsePosition
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 class DaozhaoActivity : AppCompatActivity() {
 
@@ -186,6 +185,11 @@ class DaozhaoActivity : AppCompatActivity() {
         val filter = IntentFilter()
         filter.addAction("com.daozhao.push.action")
         registerReceiver(receiver, filter)
+    }
+
+    fun listenSms() {
+        val service = Intent(this, MyService::class.java)
+        startService(service)
     }
 
     fun getDataFromIntent() {
