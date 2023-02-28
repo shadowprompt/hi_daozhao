@@ -7,9 +7,9 @@ import android.util.Log
 import com.daozhao.hello.SmsHelper
 
 
-class SmsRecevier : BroadcastReceiver() {
+class SmsReceiver : BroadcastReceiver() {
     init {
-        Log.v("dimos", "SmsRecevier create")
+        Log.v("dimos", "SmsReceiver create")
     }
 
     override fun onReceive(context: Context, intent: Intent) {

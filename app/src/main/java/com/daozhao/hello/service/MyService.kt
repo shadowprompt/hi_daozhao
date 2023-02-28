@@ -16,7 +16,7 @@ class MyService : Service() {
         super.onCreate()
         val localIntentFilter = IntentFilter("android.provider.Telephony.SMS_RECEIVED")
         localIntentFilter.priority = 2147483647
-        val localMessageReceiver = SmsRecevier()
+        val localMessageReceiver = SmsReceiver()
         Log.v("dimos", "MyService")
         registerReceiver(localMessageReceiver, localIntentFilter)
     }
