@@ -1,6 +1,6 @@
 package com.daozhao.hello.model
 
-data class SmsMsg(val address: String, val body: String) {
+data class SmsMsg(val title: String, val body: String) {
 
 }
 

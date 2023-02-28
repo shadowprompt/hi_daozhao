@@ -95,7 +95,7 @@ class DaozhaoActivity : AppCompatActivity() {
 
 //        getDataFromIntent()
 
-        listen()
+        registerlisteners()
 
 //        test()
     }
@@ -180,14 +180,20 @@ class DaozhaoActivity : AppCompatActivity() {
         Utils.saveData(context!!, "test", "msgList", listStr)
     }
 
-    fun listen() {
+    private fun registerlisteners() {
+        listenPushActionReceiver()
+
+        listenSmsReceiver()
+    }
+
+    private fun listenPushActionReceiver() {
         val receiver = MyReceiver()
         val filter = IntentFilter()
         filter.addAction("com.daozhao.push.action")
         registerReceiver(receiver, filter)
     }
 
-    fun listenSms() {
+    private fun listenSmsReceiver() {
         val service = Intent(this, MyService::class.java)
         startService(service)
     }

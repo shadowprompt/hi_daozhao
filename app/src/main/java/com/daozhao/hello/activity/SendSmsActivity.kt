@@ -11,7 +11,7 @@ import com.daozhao.hello.R
 import com.daozhao.hello.service.SendSmsReceiver
 
 
-class SendMessageActivity : Activity() {
+class SendSmsActivity : Activity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send_sms)

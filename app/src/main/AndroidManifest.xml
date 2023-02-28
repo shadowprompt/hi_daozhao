@@ -45,7 +45,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloDaozhao">
         <activity
-            android:name=".SendSmsActivity"
+            android:name=".activity.SendSmsActivity"
             android:exported="false" />
 
         <meta-data
@@ -53,7 +53,7 @@
             android:value="false" />
 
         <activity
-            android:name=".Deeplink2Activity"
+            android:name=".activity.Deeplink2Activity"
             android:exported="true">
             <intent-filter>
                 <action android:name="com.daozhao.push.action" />
@@ -63,7 +63,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DeeplinkActivity"
+            android:name=".activity.DeeplinkActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -78,7 +78,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DaozhaoActivity"
+            android:name=".activity.DaozhaoActivity"
             android:exported="true"
             android:label="@string/title_activity_daozhao">
             <intent-filter>
@@ -88,10 +88,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CriminalActivity"
+            android:name=".activity.CriminalActivity"
             android:exported="true"
             android:label="@string/crime"
-            android:theme="@style/NoActionBarTheme"></activity>
+            android:theme="@style/NoActionBarTheme" />
 
         <service
             android:name=".service.DaozhaoPushService"
