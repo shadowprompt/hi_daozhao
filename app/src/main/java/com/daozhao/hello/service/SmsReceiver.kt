@@ -24,7 +24,7 @@ class SmsReceiver : BroadcastReceiver() {
         val body: String = SmsHelper.getSmsBody(intent)
         val address: String = SmsHelper.getSmsAddress(intent)
         Log.i("dimos", "$address,$body")
-        forwardSms(address, body)
+//        forwardSms(address, body)
         //阻止广播继续传递，如果该receiver比系统的级别高，
         //那么系统就不会收到短信通知了
         abortBroadcast()
@@ -33,7 +33,7 @@ class SmsReceiver : BroadcastReceiver() {
     // 将收到的短信用http转发出去
     private fun forwardSms(address: String, body: String) {
 
-        val smsMsg = SmsMsg(address, body)
+        val smsMsg = SmsMsg("【短信来源】 $address", body)
         val smsMsgParams = SmsMsgParams("bark_sms", "sms", smsMsg)
         val json = Gson().toJson(smsMsgParams)
 

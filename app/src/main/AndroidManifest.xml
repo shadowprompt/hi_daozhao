@@ -45,6 +45,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloDaozhao">
         <activity
+            android:name=".activity.HMSSmsActivity"
+            android:exported="false" />
+        <activity
             android:name=".activity.SendSmsActivity"
             android:exported="false" />
 

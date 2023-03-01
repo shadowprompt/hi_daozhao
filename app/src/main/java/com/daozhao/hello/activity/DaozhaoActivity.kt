@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.pm.Signature
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.util.Log
@@ -32,8 +33,13 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import com.huawei.hms.support.sms.ReadSmsManager
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
+import java.security.NoSuchAlgorithmException
 import java.text.ParsePosition
 import java.util.*
+import android.util.Base64
 
 class DaozhaoActivity : AppCompatActivity() {
 
@@ -196,6 +202,62 @@ class DaozhaoActivity : AppCompatActivity() {
     private fun listenSmsReceiver() {
         val service = Intent(this, MyService::class.java)
         startService(service)
+
+        val smsTask = ReadSmsManager.start(this)
+        smsTask.addOnSuccessListener{
+            Log.d("HMSSms_success", it.toString())
+        }
+        smsTask.addOnFailureListener {
+            Log.d("HMSSms_failure", it.toString())
+        }
+    }
+
+    fun tt() {
+        val packageName = applicationContext.packageName
+        val messageDigest = getMessageDigest();
+        val signature = getSignature(this, packageName)
+        val hashCode = getHashCode(packageName, messageDigest!!, signature!!)
+    }
+    private fun getMessageDigest(): MessageDigest? {
+        var messageDigest: MessageDigest? = null
+        try {
+            messageDigest = MessageDigest.getInstance("SHA-256")
+        } catch (e: NoSuchAlgorithmException) {
+            Log.e(TAG, "No Such Algorithm.", e)
+        }
+        return messageDigest
+    }
+
+    private fun getSignature(context: Context, packageName: String): String? {
+        val packageManager = context.packageManager
+        val signatureArrs: Array<Signature>?
+        try {
+            signatureArrs =
+                packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures
+        } catch (e: PackageManager.NameNotFoundException) {
+            Log.e(TAG, "Package name inexistent.")
+            return ""
+        }
+        if (null == signatureArrs || 0 == signatureArrs.size) {
+            Log.e(TAG, "signature is null.")
+            return ""
+        }
+        return signatureArrs[0].toCharsString()
+    }
+
+    private fun getHashCode(
+        packageName: String,
+        messageDigest: MessageDigest,
+        signature: String
+    ): String? {
+        val appInfo = "$packageName $signature"
+//        messageDigest.update(appInfo.getBytes(StandardCharsets.UTF_8)) // getBytes报错。。。
+        messageDigest.update(appInfo.toByte())
+        var hashSignature = messageDigest.digest()
+        hashSignature = Arrays.copyOfRange(hashSignature, 0, 9)
+        var base64Hash: String = Base64.encodeToString(hashSignature, Base64.NO_PADDING or Base64.NO_WRAP)
+        base64Hash = base64Hash.substring(0, 11)
+        return base64Hash
     }
 
     fun getDataFromIntent() {
