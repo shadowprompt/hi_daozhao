@@ -252,7 +252,7 @@ class DaozhaoActivity : AppCompatActivity() {
     ): String? {
         val appInfo = "$packageName $signature"
 //        messageDigest.update(appInfo.getBytes(StandardCharsets.UTF_8)) // getBytes报错。。。
-        messageDigest.update(appInfo.toByte())
+        messageDigest.update(appInfo.toByteArray())
         var hashSignature = messageDigest.digest()
         hashSignature = Arrays.copyOfRange(hashSignature, 0, 9)
         var base64Hash: String = Base64.encodeToString(hashSignature, Base64.NO_PADDING or Base64.NO_WRAP)
