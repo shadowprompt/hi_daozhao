@@ -3,6 +3,7 @@ package com.daozhao.hello.ui.dashboard
 import android.Manifest
 import android.app.*
 import android.content.*
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -14,7 +15,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -149,6 +152,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_showNotice).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_showAlarm).setOnClickListener(this)
         (root as ConstraintLayout).findViewById<Button>(R.id.btn_setToAlarm).setOnClickListener(this)
+        (root as ConstraintLayout).findViewById<Button>(R.id.btn_readSms).setOnClickListener(this)
 
 
         FirebaseApp.initializeApp(mContext!!)
@@ -361,6 +365,20 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             .setContentIntent(pendingIntent)
             .addAction(R.drawable.ic_launcher_background, "snooze", snoozePendingIntent)
 
+        if (ActivityCompat.checkSelfPermission(
+                mContext!!,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
         NotificationManagerCompat.from(requireContext()).notify(0, builder.build())
     }
 
@@ -619,6 +637,31 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         Log.i("ALARM_LIST", beanList.toString())
     }
 
+    private fun onReadSms() {
+        if (ActivityCompat.checkSelfPermission(
+                mContext!!,
+                Manifest.permission.READ_SMS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_NO_PERMISSION")
+            (registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+                if (isGranted) {
+                    Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_$isGranted")
+                    readSms()
+                } else {
+                    Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_$isGranted")
+                }
+            }).launch(Manifest.permission.READ_SMS)
+        } else {
+            Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_HAS_PERMISSION")
+            readSms()
+        }
+    }
+
+    private fun readSms() {
+
+    }
+
     override fun onClick(v: View?) {
         when(v?.id) {
             R.id.getTokenBtn2 -> getToken()
@@ -633,6 +676,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.jd -> updateUrl("https://www.jd.com")
             R.id.contact -> getContactPermission()
             R.id.btn_setToAlarm -> setToAlarm()
+            R.id.btn_readSms -> onReadSms()
         }
     }
 }
