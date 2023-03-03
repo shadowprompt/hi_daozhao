@@ -83,6 +83,15 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     // Declares an array to contain selection arguments
     private var selectionArgs: Array<String> = arrayOf("")
 
+    private val activityResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        if (isGranted) {
+            Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_$isGranted")
+            readSms()
+        } else {
+            Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_$isGranted")
+        }
+    }
+
     companion object {
         private const val TAG: String = "DashboardFragment"
         private const val GET_AAID = 1
@@ -638,23 +647,22 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     }
 
     private fun onReadSms() {
-        if (ActivityCompat.checkSelfPermission(
+        when {
+            ActivityCompat.checkSelfPermission(
                 mContext!!,
                 Manifest.permission.READ_SMS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_NO_PERMISSION")
-            (registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-                if (isGranted) {
-                    Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_$isGranted")
-                    readSms()
-                } else {
-                    Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_$isGranted")
-                }
-            }).launch(Manifest.permission.READ_SMS)
-        } else {
-            Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_HAS_PERMISSION")
-            readSms()
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                Log.i(CONST.PERMISSIONS_TAG, "READ_SMS_NO_PERMISSION")
+                readSms()
+            }
+            shouldShowRequestPermissionRationale(Manifest.permission.READ_SMS) -> {
+                Log.i(CONST.PERMISSIONS_TAG, "showUI")
+                activityResultLauncher.launch(Manifest.permission.READ_SMS)
+            }
+            else -> {
+                // ask for permission
+                activityResultLauncher.launch(Manifest.permission.READ_SMS)
+            }
         }
     }
 
