@@ -205,10 +205,14 @@ class DaozhaoActivity : AppCompatActivity() {
 
         val smsTask = ReadSmsManager.start(this)
         smsTask.addOnSuccessListener{
-            Log.d("HMSSms_success", it.toString())
+            it?.toString()?.let {
+                    it1 -> Log.d("HMSSms_success", it1)
+            }
         }
         smsTask.addOnFailureListener {
-            Log.d("HMSSms_failure", it.toString())
+            it?.toString()?.let {
+                    it1 -> Log.d("HMSSms_failure", it1)
+            }
         }
     }
 
