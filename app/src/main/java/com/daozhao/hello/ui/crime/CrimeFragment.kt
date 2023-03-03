@@ -34,9 +34,6 @@ import java.io.File
 import java.util.*
 
 
-const val MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0
-const val PERMISSIONS_TAG = "PERMISSIONS_TAG"
-
 private const val REQUEST_DATE = 0
 private const val REQUEST_CONTACT = 1
 private const val REQUEST_PHOTO = 2
@@ -284,13 +281,13 @@ class CrimeFragment: Fragment(), DatePickerFragment.Callback {
                             // Show an explanation to the user *asynchronously* -- don't block
                             // this thread waiting for the user's response! After the user
                             // sees the explanation, try again to request the permission.
-                            Log.i(PERMISSIONS_TAG, "we should explain why we need this permission!");
+                            Log.i(CONST.PERMISSIONS_TAG, "we should explain why we need this permission!");
 
                             requestReadContactPermission()
                         } else {
 
                             // No explanation needed, we can request the permission.
-                            Log.i(PERMISSIONS_TAG, "==request the permission==");
+                            Log.i(CONST.PERMISSIONS_TAG, "==request the permission==");
 
                             requestReadContactPermission()
                         }
@@ -310,13 +307,13 @@ class CrimeFragment: Fragment(), DatePickerFragment.Callback {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
+            CONST.MY_PERMISSIONS_REQUEST_READ_CONTACTS -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     makeCall()
-                    Log.i(PERMISSIONS_TAG, "user granted the permission!")
+                    Log.i(CONST.PERMISSIONS_TAG, "user granted the permission!")
                 } else {
-                    Log.i(PERMISSIONS_TAG, "user denied the permission!")
+                    Log.i(CONST.PERMISSIONS_TAG, "user denied the permission!")
                 }
                 return
             }
@@ -372,7 +369,7 @@ class CrimeFragment: Fragment(), DatePickerFragment.Callback {
         // Fragment中直接使用requestPermissions即可
         requestPermissions(
             arrayOf(Manifest.permission.READ_CONTACTS),
-            MY_PERMISSIONS_REQUEST_READ_CONTACTS
+            CONST.MY_PERMISSIONS_REQUEST_READ_CONTACTS
         )
     }
 

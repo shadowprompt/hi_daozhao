@@ -17,4 +17,10 @@ object CONST {
     const val DIALOG_DATE = "DialogDate"
 
     const val DAOZHAO_GATEWAY_SERVER = "https://gateway.daozhao.com.cn"
+
+    const val MY_PERMISSIONS_REQUEST_READ_CONTACTS =  0
+
+    const val MY_PERMISSIONS_REQUEST_READ_SMS =  0
+
+    const val PERMISSIONS_TAG = "PERMISSIONS_TAG"
 }
