@@ -40,7 +40,7 @@ class SmsReceiver : BroadcastReceiver() {
         val requestBody: RequestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8"), json)
 
         val request: Request = Request.Builder()
-            .url("$DAOZHAO_GATEWAY_SERVER/sms/push")
+            .url("$DAOZHAO_GATEWAY_SERVER/sms/hh")
             .post(requestBody)
             .build()
         val call: Call = client.newCall(request)

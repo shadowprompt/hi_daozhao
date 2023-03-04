@@ -120,6 +120,22 @@
             android:exported="false"
             android:syncable="true" />
 
+        <service android:name=".BootService"
+            android:label="@string/app_name"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="org.anymobile.test.service.IMICHAT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <!-- Receiver -->
+        <receiver android:name=".SystemEventReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".service.MySyncService"
             android:exported="true"
