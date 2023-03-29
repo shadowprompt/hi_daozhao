@@ -18,6 +18,6 @@ class MyService : Service() {
         localIntentFilter.priority = 2147483647
         val localMessageReceiver = SmsReceiver()
         Log.v("dimos", "MyService")
-        registerReceiver(localMessageReceiver, localIntentFilter)
+//        registerReceiver(localMessageReceiver, localIntentFilter)
     }
 }

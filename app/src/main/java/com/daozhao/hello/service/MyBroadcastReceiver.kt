@@ -9,6 +9,13 @@ import android.widget.Toast
 class MyBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        Log.v("dimos", "MyBroadcastReceiver")
+        // 启动时注册服务
+        if (intent.action == ACTION) {
+            val service = Intent(context, MyService::class.java)
+            context.startService(service)
+        }
+
         StringBuilder().apply {
             append("Action: ${intent.action}\n")
             append("URI: ${intent.toUri(Intent.URI_INTENT_SCHEME)}\n")
@@ -21,5 +28,6 @@ class MyBroadcastReceiver : BroadcastReceiver() {
 
     companion object {
         val TAG = "MyBroadcastReceiver"
+        const val ACTION = "android.intent.action.BOOT_COMPLETED"
     }
 }

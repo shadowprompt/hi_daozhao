@@ -4,8 +4,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import androidx.core.app.NotificationManagerCompat
 import com.daozhao.hello.CONST.DAOZHAO_GATEWAY_SERVER
 import com.daozhao.hello.SmsHelper
+import com.daozhao.hello.Utils
 import com.daozhao.hello.model.SmsMsg
 import com.daozhao.hello.model.SmsMsgParams
 import com.google.gson.Gson
@@ -23,7 +25,8 @@ class SmsReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val body: String = SmsHelper.getSmsBody(intent)
         val address: String = SmsHelper.getSmsAddress(intent)
-        Log.i("dimos", "$address,$body")
+        Log.v("dimos received", "$address,$body")
+        showSms(context, "短信源自$address", body)
 //        forwardSms(address, body)
         //阻止广播继续传递，如果该receiver比系统的级别高，
         //那么系统就不会收到短信通知了
@@ -34,13 +37,13 @@ class SmsReceiver : BroadcastReceiver() {
     private fun forwardSms(address: String, body: String) {
 
         val smsMsg = SmsMsg("【短信来源】 $address", body)
-        val smsMsgParams = SmsMsgParams("bark_sms", "sms", smsMsg)
+        val smsMsgParams = SmsMsgParams("bark_sms", "sms", arrayOf("LB") ,smsMsg)
         val json = Gson().toJson(smsMsgParams)
 
         val requestBody: RequestBody = FormBody.create(MediaType.parse("application/json; charset=utf-8"), json)
 
         val request: Request = Request.Builder()
-            .url("$DAOZHAO_GATEWAY_SERVER/sms/hh")
+            .url("$DAOZHAO_GATEWAY_SERVER/sms/push")
             .post(requestBody)
             .build()
         val call: Call = client.newCall(request)
@@ -55,5 +58,12 @@ class SmsReceiver : BroadcastReceiver() {
                 Log.i("smsPush_response", "fetch success: $address body: $body")
             }
         })
+    }
+
+    private fun showSms(context: Context, title: String, body: String) {
+        val builder = Utils.noticeBuilder(context, title, body, body)
+        // 采用不同的notifyId，避免覆盖
+        val notifyId = System.currentTimeMillis().toInt()
+        NotificationManagerCompat.from(context).notify(notifyId, builder.build())
     }
 }
