@@ -10,7 +10,7 @@
         android:id="@+id/getTokenBtn2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Get Token"
+        android:text="@string/dashboard_getToken"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -18,8 +18,19 @@
         android:id="@+id/toggle2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Push Toggle"
+        android:text="@string/dashboard_toggle"
         app:layout_constraintTop_toBottomOf="@id/getTokenBtn2"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/text_tip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:layout_marginTop="20sp"
+        android:textSize="14sp"
+        android:text="@string/dashboard_tips"
+        app:layout_constraintTop_toBottomOf="@id/toggle2"
         app:layout_constraintLeft_toLeftOf="parent" />
 
     <TextView
@@ -29,7 +40,8 @@
         android:textAlignment="center"
         android:layout_marginTop="20sp"
         android:textSize="20sp"
-        app:layout_constraintTop_toBottomOf="@id/toggle2"
+        android:singleLine="false"
+        app:layout_constraintTop_toBottomOf="@id/text_tip"
         app:layout_constraintLeft_toLeftOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

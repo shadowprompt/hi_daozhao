@@ -94,12 +94,12 @@
 			}
 		},
 		{
-			"package_name":"com.daozhao.hi",
+			"package_name":"com.daozhao.hello",
 			"client":{
 				"app_id":"102930575"
 			},
 			"app_info":{
-				"package_name":"com.daozhao.hi",
+				"package_name":"com.daozhao.hello",
 				"app_id":"102930575"
 			},
 			"oauth_client":{

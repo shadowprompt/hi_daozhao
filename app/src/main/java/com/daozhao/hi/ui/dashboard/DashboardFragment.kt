@@ -134,19 +134,19 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         if (enable) {
             HmsMessaging.getInstance(mContext).turnOnPush().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    textLog("turnOnPush Complete")
+                    textLog("已开启消息推送")
                     status = false;
                 } else {
-                    textLog("turnOnPush failed: cause=" + task.exception.message)
+                    textLog("开启消息推送失败\n原因：" + task.exception.message)
                 }
             }
         } else {
             HmsMessaging.getInstance(mContext).turnOffPush().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    textLog("turnOffPush Complete")
+                    textLog("已关闭消息推送")
                     status = true;
                 } else {
-                    textLog("turnOffPush  failed: cause =" + task.exception.message)
+                    textLog("关闭消息推送失败\n原因：" + task.exception.message)
                 }
             }
         }
@@ -158,7 +158,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             run {
                 if (it.isComplete) {
                     var uuid = it.result.toString();
-                    textLog("uuid complete " + uuid);
+                    textLog("成功获取uuid: " + uuid);
                     // 用hutool发送请求
 //                    val paramMap: HashMap<String, Any> = HashMap()
 //                    paramMap["id"] = uuid
@@ -176,13 +176,13 @@ class DashboardFragment : Fragment(), View.OnClickListener {
                     val call: Call = client.newCall(request)
                     call.enqueue(object : Callback {
                         override fun onFailure(call: Call?, e: IOException?) {
-                            textLog("fetch failed: " + uuid + " token: " + token, true)
+                            textLog("存储至服务器失败\nuuid: $uuid\ntoken: $token", true)
                         }
 
                         @Throws(IOException::class)
                         override fun onResponse(call: Call?, response: Response) {
                             val result: String = response.body().string()
-                            textLog("fetch success: " + uuid + " token: " + token)
+                            textLog("已存储至服务器\nuuid: $uuid\ntoken: $token")
                         }
                     })
                 }

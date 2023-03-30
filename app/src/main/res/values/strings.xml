@@ -3,40 +3,10 @@
     <string name="title_activity_daozhao">Hi Daozhao</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
-    <string name="title_discovery">Discovery</string>
     <string name="title_notifications">Notifications</string>
-    <string name="deep_link">This is the deep link page.</string>
-    <string name="deep2_link">This is the target activity when you tap notification messages.</string>
-    <string name="open_page_by_action">Open Page by Action</string>account_auth_provider
-    <string name="account_auth_provider">Account auth provider</string>
-    <string name="default_content">DefaultContent</string>
-    <string name="crime">Crime</string>
-    <string name="new_crime">New crime</string>
-    <string name="crime_title_hint">Enter a title for the crime.</string>
-    <string name="crime_title_label">Title</string>
-    <string name="crime_details_label">Details</string>
-    <string name="crime_solved_label">Solved</string>
-    <string name="crime_list">Crime List</string>
-
-    <string name="crime_suspect_text">Choose Suspect</string>
-    <string name="crime_report_text">Send Crime report</string>
-    <string name="crime_report">%1$s!
-        The Crime was discovered on %2$s, %3$s and %4$s
-    </string>
-    <string name="crime_report_solved">The case is solved</string>
-    <string name="crime_report_unsolved">The case is unsolved</string>
-    <string name="crime_report_no_suspect">There is no suspect</string>
-    <string name="crime_report_suspect">The suspect is %s</string>
-    <string name="crime_report_subject">CriminalIntent Crime Report</string>
-    <string name="send_report">Send report via</string>
-
-    <string name="make_call">Make a call</string>
-
-    <!--    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-    <!--        <item name="colorPrimary">@color/coloPrimary</item>-->
-    <!--        <item name="colorPrimaryDark">@color/coloPrimaryDark</item>-->
-    <!--        <item name="colorAccent">@color/coloAccent</item>-->
-    <!--    </style>-->
+    <string name="dashboard_getToken">获取HMS token并提交</string>
+    <string name="dashboard_toggle">切换是否接收通知的开关</string>
+    <string name="dashboard_tips">如果您想接收到推送消息请务必获取token并成功提交至服务器，不想接收消息时可通过"开启或停止接收通知"这一开关来关闭通知</string>
 
     <style name="NoActionBarTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
