@@ -11,7 +11,7 @@ android {
     compileSdkVersion 33
 
     defaultConfig {
-        applicationId "com.daozhao.hello"
+        applicationId "com.daozhao.hi"
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 1
@@ -22,7 +22,7 @@ android {
 
     signingConfigs {
         config {
-            storeFile file('hello.jks')
+            storeFile file('hi.jks')
             keyPassword 'Ohmylady3'
             keyAlias = 'key0'
             storePassword 'Ohmylady3'
@@ -39,7 +39,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             applicationVariants.all { variant ->
                 variant.outputs.all {
-                    outputFileName = "Hello Daozhao_${variant.name}_${variant.versionName}_${new Date().format('yyyyMMdd')}.apk"
+                    outputFileName = "Hi Daozhao_${variant.name}_${variant.versionName}_${new Date().format('yyyyMMdd')}.apk"
                 }
             }
         }
@@ -57,7 +57,7 @@ android {
     kapt {
         // 给@Database注解提供schema文件保存位置
         arguments {
-            arg("roo.schemaLocation", '/Users/shadow/Dev/hello_daozhao/app/')
+            arg("roo.schemaLocation", '/Users/shadow/Dev/hi_daozhao/app/')
         }
     }
 }

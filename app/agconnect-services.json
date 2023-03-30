@@ -1,9 +1,9 @@
 {
 	"agcgw":{
-		"backurl":"connect-drcn.hispace.hicloud.com",
-		"url":"connect-drcn.dbankcloud.cn",
-		"websocketbackurl":"connect-ws-drcn.hispace.dbankcloud.com",
-		"websocketurl":"connect-ws-drcn.hispace.dbankcloud.cn"
+		"backurl":"connect-dra.hispace.hicloud.com",
+		"url":"connect-dra.dbankcloud.cn",
+		"websocketbackurl":"connect-ws-dra.hispace.dbankcloud.com",
+		"websocketurl":"connect-ws-dra.hispace.dbankcloud.cn"
 	},
 	"agcgw_all":{
 		"CN":"connect-drcn.dbankcloud.cn",
@@ -31,21 +31,21 @@
 		"client_id":"222311772965569536",
 		"client_secret":"5990B381FB8C6AD02AC313866FA0702C5B9308E8025D89987452115C9B294EA2",
 		"project_id":"9105385871708200535",
-		"app_id":"102930575",
+		"app_id":"107960031",
 		"api_key":"CgB6e3x9F7SXLqPbYFmFfhS4a9OpRArJ6iHyzRlQJXiRBZCJ1blxKGtLh2pUUG9IrS71N5JfiQfUHXMuxQ/i1JOc",
-		"package_name":"com.daozhao.hello"
+		"package_name":"com.daozhao.hi"
 	},
 	"oauth_client":{
-		"client_id":"102930575",
+		"client_id":"107960031",
 		"client_type":1
 	},
 	"app_info":{
-		"app_id":"102930575",
-		"package_name":"com.daozhao.hello"
+		"app_id":"107960031",
+		"package_name":"com.daozhao.hi"
 	},
 	"service":{
 		"analytics":{
-			"collector_url":"datacollector-drcn.dt.hicloud.com,datacollector-drcn.dt.dbankcloud.cn",
+			"collector_url":"datacollector-dra.dt.hicloud.com,datacollector-dra.dt.dbankcloud.cn",
 			"collector_url_ru":"datacollector-drru.dt.dbankcloud.ru,datacollector-drru.dt.hicloud.com",
 			"collector_url_sg":"datacollector-dra.dt.hicloud.com,datacollector-dra.dt.dbankcloud.cn",
 			"collector_url_de":"datacollector-dre.dt.hicloud.com,datacollector-dre.dt.dbankcloud.cn",
@@ -58,7 +58,7 @@
 			"dh_url":"edukit.edu.cloud.huawei.com.cn"
 		},
 		"search":{
-			"url":"https://search-drcn.cloud.huawei.com"
+			"url":"https://search-dra.cloud.huawei.com"
 		},
 		"cloudstorage":{
 			"storage_url_sg_back":"https://agc-storage-dra.cloud.huawei.asia",
@@ -69,22 +69,37 @@
 			"storage_url":"https://agc-storage-drcn.platform.dbankcloud.cn",
 			"storage_url_sg":"https://ops-dra.agcstorage.link",
 			"storage_url_cn_back":"https://agc-storage-drcn.cloud.huawei.com.cn",
-			"storage_url_cn":"https://agc-storage-drcn.platform.dbankcloud.cn"
+			"storage_url_cn":"https://agc-storage-drcn.platform.dbankcloud.cn",
+			"default_storage":""
 		},
 		"ml":{
-			"mlservice_url":"ml-api-drcn.ai.dbankcloud.com,ml-api-drcn.ai.dbankcloud.cn"
+			"mlservice_url":"ml-api-dra.ai.dbankcloud.com,ml-api-dra.ai.dbankcloud.cn"
 		}
 	},
-	"region":"CN",
+	"region":"SG",
 	"configuration_version":"3.0",
 	"appInfos":[
 		{
-			"package_name":"com.daozhao.hello",
+			"package_name":"com.daozhao.hi",
+			"client":{
+				"app_id":"107960031"
+			},
+			"app_info":{
+				"package_name":"com.daozhao.hi",
+				"app_id":"107960031"
+			},
+			"oauth_client":{
+				"client_type":1,
+				"client_id":"107960031"
+			}
+		},
+		{
+			"package_name":"com.daozhao.hi",
 			"client":{
 				"app_id":"102930575"
 			},
 			"app_info":{
-				"package_name":"com.daozhao.hello",
+				"package_name":"com.daozhao.hi",
 				"app_id":"102930575"
 			},
 			"oauth_client":{

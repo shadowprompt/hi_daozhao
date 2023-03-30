@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:context=".ui.discovery.DiscoveryFragment">
+    android:layout_height="fill_parent">
     <WebView  xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/webview"
         android:layout_width="match_parent"
@@ -17,35 +16,9 @@
         android:scrollbarSize="0dp"
         android:outlineAmbientShadowColor="@android:color/transparent"
         android:outlineSpotShadowColor="@android:color/transparent"
-        android:layout_marginBottom="50dp"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/webview"
-        android:id="@+id/webClick"
-        android:text="webClick"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/webview"
-        app:layout_constraintLeft_toRightOf="@id/webClick"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/loadLocal"
-        android:text="loadLocal"
-        />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/webview"
-        app:layout_constraintLeft_toRightOf="@id/loadLocal"
-        android:layout_marginLeft="10dp"
-        android:id="@+id/loadDaozhao"
-        android:text="loadDaozhao"
-        />
 </androidx.constraintlayout.widget.ConstraintLayout>
