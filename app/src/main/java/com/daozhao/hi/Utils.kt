@@ -42,7 +42,7 @@ object Utils {
 
     fun noticeBuilder(context: Context, title: String, text: String, bigText: String): NotificationCompat.Builder {
         return NotificationCompat.Builder(context!!, CONST.NOTIFICATION_CHANNEL_ID)
-            .setSmallIcon(R.drawable.daozhao)
+            .setSmallIcon(R.drawable.daozhaolite)
             .setContentTitle(title)
             .setColor(Color.parseColor("#df3473")) // 背景色
             .setContentText(text)
