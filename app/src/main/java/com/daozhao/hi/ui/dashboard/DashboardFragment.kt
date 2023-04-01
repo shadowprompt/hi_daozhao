@@ -98,7 +98,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             override fun run() {
                 try {
                     // read from agconnect-services.json
-                    val appId = "102930575"
+                    val appId = "107960031"
 
                     val token = HmsInstanceId.getInstance(mContext).getToken(appId, "HCM")
                     storeTokenProfile(token)
@@ -170,7 +170,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
                     formBody.add("id", uuid);
                     formBody.add("pushToken",token.toString());
                     val request: Request = Request.Builder()
-                        .url("https://gateway.daozhao.com.cn/HMS/storePushToken")
+                        .url("https://gateway.daozhao.com.cn/HMS_HI/storePushToken")
                         .post(formBody.build())
                         .build()
                     val call: Call = client.newCall(request)
