@@ -23,7 +23,7 @@ import com.huawei.hms.push.RemoteMessage
 import com.huawei.hms.push.SendException
 import java.util.*
 
-class DaozhaoPushService : HmsMessageService() {
+class DaozhaoHmsMessageService : HmsMessageService() {
     /**
      * When an app calls the getToken method to apply for a token from the server,
      * if the server does not return the token during current method calling, the server can return the token through this method later.

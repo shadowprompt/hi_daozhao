@@ -61,7 +61,7 @@
         </activity>
 
         <service
-            android:name=".service.DaozhaoPushService"
+            android:name=".service.DaozhaoHmsMessageService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.huawei.push.action.MESSAGING_EVENT" />
