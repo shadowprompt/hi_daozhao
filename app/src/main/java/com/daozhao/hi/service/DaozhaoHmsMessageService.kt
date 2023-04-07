@@ -15,12 +15,22 @@
  */
 package com.daozhao.hi.service
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import android.os.IBinder
 import android.util.Log
+import com.daozhao.hi.Utils
+import com.daozhao.hi.model.Msg
+import com.google.gson.Gson
+import com.google.gson.JsonArray
+import com.google.gson.JsonParser
+import com.google.gson.reflect.TypeToken
 import com.huawei.hms.push.HmsMessageService
 import com.huawei.hms.push.RemoteMessage
 import com.huawei.hms.push.SendException
+import java.text.ParsePosition
 import java.util.*
 
 class DaozhaoHmsMessageService : HmsMessageService() {
@@ -132,14 +142,8 @@ class DaozhaoHmsMessageService : HmsMessageService() {
                 getVibrateConfig: ${notification.vibrateConfig}
                 getVisibility: ${notification.visibility}""".trimIndent())
         }
-        val intent = Intent()
-        intent.action = CODELABS_ACTION
-        intent.putExtra("method", "onMessageReceived")
-        intent.putExtra("msg", "onMessageReceived called, message id:" + message.messageId)
-        intent.putExtra("msgType", "HMS")
-        intent.putExtra("msgData", message.data)
-        // 将HMS消息转换成广播自行处理
-        sendBroadcast(intent)
+
+        messageProcess(message)
 
         val judgeWhetherIn10s = false
 
@@ -169,6 +173,65 @@ class DaozhaoHmsMessageService : HmsMessageService() {
         sendBroadcast(intent)
     }
 
+    private fun messageProcess(message: RemoteMessage) {
+        val intent = Intent()
+        intent.putExtra("msgData", message.data)
+        Utils.showMsgViaStatusBar(this, intent.extras, "HMS")
+        updateLog(this, message.data)
+    }
+
+    private fun updateLog(context: Context, content: String) {
+        var list = getLocalList2(getLocalListStr(context));
+        val newMsgBean: Msg = Gson().fromJson(content, Msg::class.java)
+
+        list.add(newMsgBean)
+
+        list = list.distinctBy { it.time }  as ArrayList<Msg>
+
+        sortMsgList(list)
+
+        val listStr = Gson().toJson(list);
+        Log.e("listStr", listStr)
+        Utils.saveData(context!!, "test", "msgList", listStr)
+    }
+    fun getLocalList(str: String): ArrayList<Msg> {
+        val type = object : TypeToken<ArrayList<Msg>>() {}.type
+        return Gson().fromJson(str, type)
+    }
+
+    private fun getLocalList2(str: String): ArrayList<Msg> {
+        val jsonArray: JsonArray = JsonParser.parseString(str).asJsonArray
+        val msgBeanList: ArrayList<Msg> = ArrayList()
+        //加强for循环遍历JsonArray
+        for (item in jsonArray) {
+            //使用GSON，直接转成Bean对象
+            val msgBean: Msg =  Gson().fromJson(item, Msg::class.java)
+            //加强for循环遍历JsonArray
+            msgBeanList.add(msgBean)
+        }
+        return msgBeanList
+    }
+
+    private fun getLocalListStr(context: Context): String {
+        var strByJson = Utils.getData(context, "test", "msgList");
+        if (strByJson == "") {
+            strByJson = "[]"
+        }
+        return strByJson!!
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    private fun sortMsgList(list: ArrayList<Msg>) {
+        list.sortWith { a, b ->
+            run {
+                val timeA =
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(a.time, ParsePosition(0)).time
+                val timeB =
+                    SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(b.time, ParsePosition(0)).time
+                timeB.compareTo(timeA)
+            }
+        }
+    }
     override fun onSendError(msgId: String?, exception: Exception?) {
         Log.i(
             TAG, "onSendError called, message id:$msgId, ErrCode:${(exception as SendException).errorCode}, " +

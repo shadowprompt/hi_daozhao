@@ -1,10 +1,16 @@
 package com.daozhao.hi
 
+import android.Manifest
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Bundle
+import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.daozhao.hi.model.Msg
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -51,5 +57,35 @@ object Utils {
                 NotificationCompat.BigTextStyle()
                 .bigText(bigText))
             .setAutoCancel(true)
+    }
+    fun showMsgViaStatusBar(context: Context?, bundle: Bundle?, source : String = "") {
+        Log.i("MsgViaStatusBar", context.toString() + '_' + bundle.toString() + '_' + source)
+        if (context == null) {
+            return;
+        }
+        if (bundle?.getString("msgData") == null) {
+            return;
+        }
+        val msgData = bundle.getString("msgData");
+        val msg = Gson().fromJson(msgData, Msg::class.java);
+        val builder = this.noticeBuilder(context, msg.title, msg.body, msg.body)
+        // 采用不同的notifyId，避免覆盖
+        val notifyId = System.currentTimeMillis().toInt()
+
+        if (ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        NotificationManagerCompat.from(context).notify(notifyId, builder.build())
     }
 }
